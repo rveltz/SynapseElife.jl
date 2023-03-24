@@ -16,3 +16,8 @@ makedocs(doctest = false,
 		"Library" => "library.md"
 	]
 	)
+	
+deploydocs(
+	repo = "github.com/rveltz/SynapseElife.git",
+	devbranch = "main"
+)

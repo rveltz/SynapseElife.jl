@@ -1,5 +1,10 @@
 # Synapse.jl
 
+| **Documentation** | **Build Status** | 
+|:-----------------:|:----------------:|
+|  |  [![CI](https://github.com/rveltz/SynapseElife/actions/workflows/ci.yml/badge.svg)](https://github.com/rveltz/SynapseElife/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/rveltz/SynapseElife/branch/main/graph/badge.svg?token=SQPQFOGJWT)](https://codecov.io/gh/rveltz/SynapseElife)
+
+
 This is the main repository for the Synapse simulation package written in Julia language. The associated publication is on [BiorXiv](https://www.biorxiv.org/content/10.1101/2021.03.30.437703v1).
 
 ### Authors
