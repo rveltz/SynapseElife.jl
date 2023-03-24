@@ -1,7 +1,6 @@
 [deps]
 ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-DocumenterLaTeX = "cd674d7a-5f81-5cf3-af33-235ef1834b99"
 LSODA = "7f56f5a3-f504-529b-bc02-0b1fe5e64312"
 PiecewiseDeterministicMarkovProcesses = "86206cdf-4603-54e0-bd58-22a2dcbf57aa"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
