@@ -1,8 +1,5 @@
 # using Revise, Plots
 using Test
-
-import Pkg; Pkg.add("Sundials")
-
 using Synapse
 using PiecewiseDeterministicMarkovProcesses, Sundials
 
