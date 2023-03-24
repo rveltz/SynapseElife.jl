@@ -59,8 +59,7 @@ is_glu_release, Docked, Reserve, t_stp, glu_release_times, bap_by_epsp_times = s
 
 Random.seed!(7)
 	result = @time evolveSynapse(
-		xc0,
-		xd0,
+		xc0, xd0,
 		param_synapse,
 		events_times[events_times .< param_synapse.t_end],
 		is_pre_or_post_event,

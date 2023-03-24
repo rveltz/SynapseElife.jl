@@ -64,7 +64,7 @@ function plot_variable(tt, xc, xd, s = :ampa; tspan = (0., Inf64), kwargs...)
 	else
 		st = [0,0]
 	end
-	plot(tt, out[s]; title = "#jumps ($s) = $(sum(st[2]))", label = "$s", xlims = (tspan[1], min(tt[end], tspan[2])), kwargs...) |> display
+	plot(tt, out[s]; title = "#jumps ($s) = $(sum(st[2]))", label = "$s", xlims = (tspan[1], min(tt[end], tspan[2])), kwargs...)
 end
 
 """
@@ -91,7 +91,7 @@ function plot_discrete(tt, xc, xd; tspan = (0., Inf64), kwargs...)
 		plot!(tt, outd[:Vsp]; title = "#jumps (Vsp) = 0", subplot=6, label="", titlefontsize = 10, xlims = (tspan[1], min(tt[end], tspan[2])),  kwargs...) |> display
 	end
 	Ind = (tt .> tspan[1]) .* (tt .< tspan[2])
-	annotate!(3000,1,"total #jumps = $(sum(Ind))",subplot=5)  |> display
+	annotate!(3000,1,"total #jumps = $(sum(Ind))",subplot=5)
 end
 
 ####################################################################################################
