@@ -5,7 +5,7 @@ The goal of this page is to reproduce the Figure 1 in [BiorXiv](https://www.bior
 This page is auto-generated in part to show that the provided code is working.
 
 ```@example FIG1
-using Revise, Synapse,
+using Synapse,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
