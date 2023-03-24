@@ -1,6 +1,6 @@
 # Synapse.jl
 
-This is the main repository for the Synapse simulation package written in Julia language. The associated publication is here on [BiorXiv](https://www.biorxiv.org/content/10.1101/2021.03.30.437703v1).
+This is the main repository for the Synapse simulation package written in Julia language. The associated publication is on [BiorXiv](https://www.biorxiv.org/content/10.1101/2021.03.30.437703v1).
 
 ### Authors
 
