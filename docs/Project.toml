@@ -1,13 +1,12 @@
 [deps]
 ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-LSODA = "7f56f5a3-f504-529b-bc02-0b1fe5e64312"
 PiecewiseDeterministicMarkovProcesses = "86206cdf-4603-54e0-bd58-22a2dcbf57aa"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-Setfield = "efcf1570-3423-57d1-acb7-fd33fddbac46"
 Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
 Synapse = "7cc9ea39-daa9-4846-be95-d8a08c9e3c85"
 
 [compat]
-Documenter = "0.24.3"
-Setfield = "0.5.0, 0.7.0, 0.8.0"
+Documenter = "0.27"
+PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7"
+julia = "^1.6"

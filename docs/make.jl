@@ -1,5 +1,7 @@
 using Documenter, Synapse, Setfield
 
+ENV["JULIA_DEBUG"]=Documenter
+
 makedocs(doctest = false,
 	sitename = "Model of excitatory synapse in Julia",
 	format = Documenter.HTML(collapselevel = 1),
