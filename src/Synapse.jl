@@ -28,6 +28,4 @@ module Synapse
 
 	export stp, evolveSynapse_ds, evolveSynapse_noformat_ds, evolveSynapse, evolveSynapse_noformat
 	export getCaM, getCamKII, getCaN
-
-
-end # module
+end

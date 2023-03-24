@@ -2,7 +2,7 @@ using Revise, Synapse,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
-	ColorSchemes, Parameters, Sundials
+	ColorSchemes, Sundials
 
 ############# Initials ##################################################
 data_protocol = dataProtocol("TigaretMellor16")
