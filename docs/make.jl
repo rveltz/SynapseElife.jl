@@ -2,7 +2,7 @@ using Documenter, Synapse, Setfield
 
 makedocs(doctest = false,
 	sitename = "Model of excitatory synapse in Julia",
-	format = false,
+	format = Documenter.HTML(collapselevel = 1),
 	pages = Any[
 		"Home" => "index.md",
 		# "Simple example" => "tutorials.md",
