@@ -9,6 +9,7 @@ DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+JumpProcesses = "ccbc3e58-028d-4f4c-8cd5-9ae44345cda5"
 LabelledArrays = "2ee39098-c373-598a-b85f-a56591580800"
 LazySets = "b4f0291d-fe17-52bc-9479-3d1a343d9043"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -28,9 +29,9 @@ PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7"
 julia = "^1.6"
 
 [extras]
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
 LSODA = "7f56f5a3-f504-529b-bc02-0b1fe5e64312"
 Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
-DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]

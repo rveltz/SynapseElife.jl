@@ -176,7 +176,7 @@ function F_synapse(xdot, pop_c, discrete_var, p_synapse::SynapseParams, t, event
 	xdot[34] = ∂λ_aux
 end
 
-function R_synapse(rate, xc, xd, p_synapse::SynapseParams, t, sum_rate)
+function R_synapse(rate, xc, xd, p_synapse::SynapseParams, t, sum_rate, glu = 0)
 
 	@unpack_SynapseParams p_synapse
 
@@ -253,7 +253,6 @@ function R_synapse(rate, xc, xd, p_synapse::SynapseParams, t, sum_rate)
 	rate[47]  =   NMDA_N2A_ke * xd[21]
 	rate[48]  =   NMDA_N2A_kf * xd[22]
 	#1line-BACK
-
 	rate[49]  =   NMDA_N2A_k_f * xd[23]
 	rate[50]  =   NMDA_N2A_k_e * xd[22]
 	rate[51]  =   NMDA_N2A_k_d * xd[21]
@@ -360,10 +359,10 @@ $(SIGNATURES)
 
 
 """
-function pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, p_synapse, nu; algo = CHV(:lsoda), kwargs...)
+function pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu; algo = CHV(:lsoda), kwargs...)
 	problem = PDMP.PDMPProblem(
 		(xdot, xc, xd, p, t) -> F_synapse(xdot, xc, xd, p, t, events_bap, bap_by_epsp),
-		(rate, xc, xd, p, t, sum_rate) -> R_synapse(rate, xc, xd, p, t, sum_rate),
+		(rate, xc, xd, p, t, sum_rate) -> R_synapse(rate, xc, xd, p, t, sum_rate, glu),
 		nu, xc, xd, p_synapse, (t1, t2);
 		Ncache = 12) # this option is for AD in PreallocationTools
 	return solve(problem, algo ;kwargs...)
@@ -460,10 +459,10 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 	events_bap = events_sorted_times[is_pre_or_post_event .== false]
 
 	# function to simulate the synapse when Glutamate is ON
-	SimGluON = (xc, xd, t1, t2) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, p_synapse, nu; algo = algos[1], save_positions = save_positionsON, reltol = reltol, abstol = abstol, kwargs...)
+	SimGluON = (xc, xd, t1, t2, glu) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu; algo = algos[1], save_positions = save_positionsON, reltol = reltol, abstol = abstol, kwargs...)
 
 	# function to simulate the synapse when Glutamate is OFF
-	SimGluOFF = (xc, xd, t1, t2) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, reconstruct(p_synapse, glu = 0.0), nu;  algo = algos[2], save_positions = save_positionsOFF, reltol = reltol, abstol = abstol, kwargs...)
+	SimGluOFF = (xc, xd, t1, t2)	 -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, zero(T), p_synapse, nu;  algo = algos[2], save_positions = save_positionsOFF, reltol = reltol, abstol = abstol, kwargs...)
 
 	# variable to display progressbar during simulation
 	# +1 for the last big till p_synapse.t_end
@@ -553,4 +552,3 @@ function getCamKII(t, XC, XD)
 			XC[indexOfVariable(:P), :]      .+
 			XC[indexOfVariable(:P2), :]
 end
-

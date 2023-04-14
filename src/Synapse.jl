@@ -15,6 +15,7 @@ module Synapse
 	include("UtilsDynamics.jl")
 	include("JumpMatrices.jl")
 	include("SynapseModel.jl")
+	include("SynapseModelCoevolve.jl")
 	include("OnlyStp.jl")
 	include("CaM-KCaM-reactions.jl")
 

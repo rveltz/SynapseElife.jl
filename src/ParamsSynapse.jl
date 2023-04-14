@@ -271,7 +271,6 @@ $(FIELDS)
 	tau_diff		 ::Float64						 = ((Vol_sp/(2*D_Ca*D_neck))+(L_neck^2/(2*D_Ca)))
 	############################################################################
 	"**SYNAPTIC GLUTAMATE TRANSIENT PARAMETERS**"
-	glu              ::Float64						 = 1.0 												# where Glutamate is ON (1) or OFF (0)
 	glu_width        ::Float64 	                     = 1.0 												# ms, 0.1 ms for synapse [REF: arbitrary]
 	glu_amp          ::Float64 			             = 1e+3 											# 1 mM [REF: arbitrary]
 	glu_cv			 ::Float64					     = .5												# 0.5 from Liu et al, Neuron, 1999
