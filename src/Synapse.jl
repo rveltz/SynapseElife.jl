@@ -7,7 +7,7 @@ module Synapse
 	using Printf
 	using LazySets # for using ∈ plasticity region
 	using StaticArrays # for using LazySets in efficient way
-	using PiecewiseDeterministicMarkovProcesses, LinearAlgebra, RecursiveArrayTools, Plots
+	using PiecewiseDeterministicMarkovProcesses, JumpProcesses, LinearAlgebra, RecursiveArrayTools, Plots
 	const PDMP = PiecewiseDeterministicMarkovProcesses
 
 	include("ParamsSynapse.jl")
@@ -15,7 +15,7 @@ module Synapse
 	include("UtilsDynamics.jl")
 	include("JumpMatrices.jl")
 	include("SynapseModel.jl")
-	include("SynapseModelCoevolve.jl")
+	include("SynapseModelODEProblem.jl")
 	include("OnlyStp.jl")
 	include("CaM-KCaM-reactions.jl")
 

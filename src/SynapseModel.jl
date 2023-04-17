@@ -400,7 +400,7 @@ function evolveSynapse(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 		verbose = false, progress = false,
 		abstol = 1e-8, reltol = 1e-7,
 		save_positions = (false, true),
-		nu = buildTransitionMatrix(), kwargs...) where T
+		nu = buildTransitionMatrix(), agg = nothing, kwargs...) where T
 
 		tt, XC, XD = evolveSynapse_noformat(xc0, xd0, p_synapse,
 						events_sorted_times,
@@ -410,7 +410,7 @@ function evolveSynapse(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 						algos;
 				verbose = verbose, progress = progress,
 				abstol = abstol, reltol = reltol, save_positions = save_positions,
-				nu = nu, kwargs...)
+				nu = nu, agg = agg, kwargs...)
 
 		# format the output to make it convenient to parse
 		# this is wasting a lot of ressources but is convenient for plotting
@@ -430,7 +430,7 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 		algos;
 		verbose = false, progress = false,
 		abstol = 1e-8, reltol = 1e-7, save_positions = (false, true),
-		nu = buildTransitionMatrix(), kwargs...) where T
+		nu = buildTransitionMatrix(), agg = nothing, kwargs...) where T
 
 	if save_positions isa Tuple{Bool, Bool}
 		save_positionsON = save_positions
@@ -459,10 +459,18 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 	events_bap = events_sorted_times[is_pre_or_post_event .== false]
 
 	# function to simulate the synapse when Glutamate is ON
-	SimGluON = (xc, xd, t1, t2, glu) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu; algo = algos[1], save_positions = save_positionsON, reltol = reltol, abstol = abstol, kwargs...)
+	if isnothing(agg)
+		SimGluON = (xc, xd, t1, t2, glu) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu; algo = algos[1], save_positions = save_positionsON, reltol = reltol, abstol = abstol, kwargs...)
+	else
+		SimGluON = (xc, xd, t1, t2, glu) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu, agg; algo = algos[1], save_positions = save_positionsON, reltol = reltol, abstol = abstol, kwargs...)
+	end
 
 	# function to simulate the synapse when Glutamate is OFF
-	SimGluOFF = (xc, xd, t1, t2)	 -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, zero(T), p_synapse, nu;  algo = algos[2], save_positions = save_positionsOFF, reltol = reltol, abstol = abstol, kwargs...)
+	if isnothing(agg)
+		SimGluOFF = (xc, xd, t1, t2)	 -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, zero(T), p_synapse, nu;  algo = algos[2], save_positions = save_positionsOFF, reltol = reltol, abstol = abstol, kwargs...)
+	else
+		SimGluOFF = (xc, xd, t1, t2)	 -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, zero(T), p_synapse, nu, agg;  algo = algos[2], save_positions = save_positionsOFF, reltol = reltol, abstol = abstol, kwargs...)
+	end
 
 	# variable to display progressbar during simulation
 	# +1 for the last big till p_synapse.t_end
