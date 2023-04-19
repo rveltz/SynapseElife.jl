@@ -1,6 +1,6 @@
 macro variable_rate_jump(i, nu, ex)
 
-	assignments = Expr[]
+	assignments = Expr[]    
 
 	alpha_beta_regex = r"(alpha|beta)_(m_r|h_r|m_t|l|1_l|2_l)"
 	alpha_beta_matches = Set([m.match for m in eachmatch(alpha_beta_regex, "$ex")])
@@ -195,7 +195,7 @@ function synapse_jumps(p_synapse::SynapseParams, nu, glu)
 	nets = (nu .> 0)
 	net_stoich = Vector{Vector{Pair{Int,Int}}}(undef, length(ma_jumps_idx))
 	for i in ma_jumps_idx
-		js = findall(nets[i, :])
+		js, _ = findnz(nets[i, :])
 		stoich = [j => nu[i, j] for j in js]
 		stoich_i = i - (i > 54 ? 25 : 0)
 		net_stoich[stoich_i] = stoich
