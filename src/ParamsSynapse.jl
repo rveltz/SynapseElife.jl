@@ -20,7 +20,7 @@ $(FIELDS)
 """
 @with_kw struct PreSynapseParams
 	"recovery constant of pre calcium decay function"
-	τ_rec 		 ::Float64		= 20000
+	τ_rec		 ::Float64		= 20000
 	"fraction of decay constant of pre calcium decay f"
 	δ_ca		 ::Float64		= .0004
 	"decay time constant of pre calcium"

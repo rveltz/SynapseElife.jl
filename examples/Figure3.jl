@@ -50,6 +50,8 @@ for k in 2:8
 		xc0 = initial_conditions_continuous_temp(param_synapse)
 		xd0 = initial_conditions_discrete(param_synapse)
 
+		nu = buildTransitionMatrix()
+
 		#####RUN MODEL
 		is_glu_release, Docked, Reserve, t_stp, glu_release_times, bap_by_epsp_times = stp(param_synapse.t_end, pre_synapse, events_times, is_pre_or_post_event, _plot = false, algo = CHV(CVODE_BDF()))
 
@@ -67,6 +69,7 @@ for k in 2:8
 				is_pre_or_post_event,
 				ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes",bap_by_epsp_times,Float64[]), #optional BaP induced by EPSP
 				is_glu_release,
+				nu,
 				(CHV(ode), CHV(ode), CHV(ode));
 				save_positions = (false, true),
 				verbose = false, progress = true) # model function

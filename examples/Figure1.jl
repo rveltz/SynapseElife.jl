@@ -53,6 +53,8 @@ pre_synapse = PreSynapseParams(h = 0) # A zero is placed here since we don't wan
 xc0 = initial_conditions_continuous_temp(param_synapse) # initial conditions deterministic vars
 xd0 = initial_conditions_discrete(param_synapse)		# initial conditions stochastic channels
 
+nu = buildTransitionMatrix() # transition matrix
+
 # RUN PRESYNAPTIC MODEL
 is_glu_release, Docked, Reserve, t_stp, glu_release_times, bap_by_epsp_times = stp(param_synapse.t_end, pre_synapse, events_times, is_pre_or_post_event, _plot = false, algo = CHV(CVODE_BDF()))
 @show "number of releases $(sum(is_glu_release))"
@@ -65,6 +67,7 @@ Random.seed!(7)
 		is_pre_or_post_event,
 		ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes", bap_by_epsp_times, Float64[]), #optional BaP induced by EPSP
 		is_glu_release,
+		nu,
 		(CHV(CVODE_BDF(linear_solver=:GMRES)), CHV(CVODE_BDF(linear_solver=:GMRES)));
 		# (CHV(:lsoda), CHV(:lsoda));
 		abstol = 1e-6, reltol = 1e-5,
@@ -178,6 +181,7 @@ gr()
 				is_pre_or_post_event,
 				ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes",bap_by_epsp_times,Float64[]), #optional BaP induced by EPSP
 				is_glu_release,
+				nu,
 				# (CHV(:lsoda), CHV(:lsoda));
 				(CHV(CVODE_BDF(linear_solver=:GMRES)), CHV(CVODE_BDF(linear_solver=:GMRES)));
 				abstol = 1e-6, reltol = 1e-5,
@@ -244,6 +248,7 @@ gr()
 			is_pre_or_post_event,
 			ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes",bap_by_epsp_times,Float64[]), #optional BaP induced by EPSP
 			is_glu_release,
+			nu,
 			(CHV(CVODE_BDF(linear_solver=:GMRES)), CHV(CVODE_BDF(linear_solver=:GMRES)));
 			abstol = 1e-6, reltol = 1e-5,
 			save_positions = (false, true),
@@ -309,6 +314,7 @@ gr()
 				is_pre_or_post_event,
 				ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes",bap_by_epsp_times,Float64[]), #optional BaP induced by EPSP
 				is_glu_release,
+				nu,
 				# (CHV(:lsoda), CHV(:lsoda));
 				(CHV(CVODE_BDF(linear_solver=:GMRES)), CHV(CVODE_BDF(linear_solver=:GMRES)));
 				abstol = 1e-6, reltol = 1e-5,
