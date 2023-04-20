@@ -26,11 +26,12 @@ function G_synapse(du, u, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
 	CaN        = CaN4
 
 	#### activation when it is inside the region
+	# this following line allocates 74.779 ns (3 allocations: 144 bytes). The 2 lines count for 25% of the performance
 	∂LTD     = SVector(CaN, CaMKII) ∈ LTD_region
 	∂LTP     = SVector(CaN, CaMKII) ∈ LTP_region
 
-	∂act_D     = a_D * ∂LTD - b_D * act_D * (1 - ∂LTD)
-	∂act_P     = a_P * ∂LTP - b_P * act_P * (1 - ∂LTP)
+	∂act_D   = a_D * ∂LTD - b_D * act_D * (1 - ∂LTD)
+	∂act_P   = a_P * ∂LTP - b_P * act_P * (1 - ∂LTP)
 
 	##### Na channel
 	m_inf = alpha_m(Vsoma) / (alpha_m(Vsoma) + beta_m(Vsoma))
@@ -112,11 +113,11 @@ function G_synapse(du, u, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
 		-kf_CaM2C*CaM2C*mKCaM
 
 	∂CaM2N = kb_2C*CaM4 + kb_CaM2N*KCaM2N + k2*PCaM2N +
-		+(1//2)*kf_2N*(Ca^2)*CaM0 - kb_2N*CaM2N - (1//2)*kf_2C*(Ca^2)*CaM2N
+		+(1//2)*kf_2N*(Ca^2)*CaM0 - kb_2N*CaM2N - (1//2)*kf_2C*(Ca^2)*CaM2N +
 		-kf_CaM2N*CaM2N*mKCaM
 
 	∂CaM4 = k2*PCaM4 + kcanb*CaN4 + kb_CaM4*KCaM4 +
-		+(1//2)*kf_2N*(Ca^2)*CaM2C + (1//2)*kf_2C*(Ca^2)*CaM2N - kb_2C*CaM4
+		+(1//2)*kf_2N*(Ca^2)*CaM2C + (1//2)*kf_2C*(Ca^2)*CaM2N - kb_2C*CaM4 +
 		-kb_2N*CaM4 - kcanf*CaM4*mCaN - kf_CaM4*CaM4*mKCaM
 
 	∂mCaN = kcanb*CaN4 - kcanf*CaM4*mCaN
@@ -169,15 +170,15 @@ function G_synapse(du, u, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
 		-kf_K2N*(Ca^2)*KCaM0 - kf_K2N*(Ca^2)*KCaM2C
 
 	### Xdot update
-	u[51] =  ∂Vsp
-	u[52] =  ∂Vdend
-	u[53] =  ∂Vsoma
-	u[54] =  ∂λ
-	u[55] =  ∂ImbufCa
-	u[56] =  ∂Ca
-	u[57] =  ∂Dye
-	u[58] =  ∂CaM0
-	u[59] =  ∂CaM2C
+	u[51] = ∂Vsp
+	u[52] = ∂Vdend
+	u[53] = ∂Vsoma
+	u[54] = ∂λ
+	u[55] = ∂ImbufCa
+	u[56] = ∂Ca
+	u[57] = ∂Dye
+	u[58] = ∂CaM0
+	u[59] = ∂CaM2C
 	u[60] = ∂CaM2N
 	u[61] = ∂CaM4
 	u[62] = ∂mCaN
