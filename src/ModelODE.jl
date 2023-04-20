@@ -272,6 +272,12 @@ macro model_jump(i, nu, rate_ex, urate_ex = nothing, rateinterval_ex = nothing)
 
 	if !isnothing(urate_ex)
 		push!(ex, quote
+			max_m_r = rates_m_r(1_000.)[1]
+			max_h_r = rates_h_r(1_000.)[2]
+			max_m_t = rates_m_t(1_000.)[1]
+			max_h_t = rates_h_t(1_000.)[2]
+			max_alpha_l = rates_l(1_000)[1]
+			max_beta_1_l, max_beta_2_l = rates_l(-1_000)[2:3]
 			function urate(u, p, t)
 				@unpack_SynapseParams p[end]
 				return $urate_ex
@@ -429,42 +435,43 @@ function J_synapse(p_synapse::SynapseParams, nu, glu)
 
 	param_idxs = 1:length(ma_jumps_idx)
 
+	# we order the jumps in ther order they appear in the dependency graph
 	jumps = [
 		MassActionJump(reactant_stoich, net_stoich; scale_rates = false, param_idxs),
-
-		################### R-type VGCC ###################
-		@model_jump(56, nu, u[25] * alpha_m_r * frwd_VGCC, u[25] * 8 * frwd_VGCC, 100), # 56
-		@model_jump(57, nu, u[26] * beta_m_r  * bcwd_VGCC, u[26] * 8 * frwd_VGCC, 100), # 57
-		@model_jump(58, nu, u[25] * alpha_h_r * frwd_VGCC, u[25] * 1e-2 * frwd_VGCC, 100), # 58
-		@model_jump(59, nu, u[27] * beta_h_r  * bcwd_VGCC, u[27] * 1e-2 * bcwd_VGCC, 100), # 59
-		@model_jump(60, nu, u[26] * alpha_h_r * frwd_VGCC, u[26] * 1e-2 * frwd_VGCC, 100), # 60
-		@model_jump(61, nu, u[28] * beta_h_r  * bcwd_VGCC, u[28] * 1e-2 * bcwd_VGCC, 100), # 61
-		@model_jump(62, nu, u[27] * alpha_m_r * frwd_VGCC, u[27] * 8 * frwd_VGCC, 100), # 62
-		@model_jump(63, nu, u[28] * beta_m_r  * bcwd_VGCC, u[28] * 8 * bcwd_VGCC, 100), # 63
-
-
-		################### T-type VGCC  ###################
-		@model_jump(64, nu, u[29] * alpha_m_t * frwd_VGCC, u[29] * 7 * frwd_VGCC, 100), # 64
-		@model_jump(65, nu, u[30] * beta_m_t  * bcwd_VGCC, u[30] * 7  * bcwd_VGCC, 100), # 65 this one can have a high rate
-		@model_jump(66, nu, u[29] * alpha_h_t * frwd_VGCC, u[29] * 0.02 * frwd_VGCC, 100), # 66
-		@model_jump(67, nu, u[31] * beta_h_t  * bcwd_VGCC, u[31] * 0.02  * bcwd_VGCC, 100), # 67
-		@model_jump(68, nu, u[30] * alpha_h_t * frwd_VGCC, u[30] * 0.02 * frwd_VGCC, 100), # 68
-		@model_jump(69, nu, u[32] * beta_h_t  * bcwd_VGCC, u[32] * 0.02  * bcwd_VGCC, 100), # 69
-		@model_jump(70, nu, u[31] * alpha_m_t * frwd_VGCC, u[31] * 7 * frwd_VGCC, 100), # 70
-		@model_jump(71, nu, u[32] * beta_m_t  * bcwd_VGCC, u[32] * 7  * bcwd_VGCC, 100), # 71, this one can have a high rate
-
-
-		################### L-type VGCC  ###################
-		@model_jump(72, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * 1  * frwd_VGCC, 100), # 72
-		@model_jump(73, nu, u[34] * beta_1_l * bcwd_VGCC, u[34] * 0.5 * bcwd_VGCC, 100), # 73
-		@model_jump(74, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * 1  * frwd_VGCC, 100), # 74
-		@model_jump(75, nu, u[35] * beta_2_l * bcwd_VGCC, u[35] * 2 * bcwd_VGCC, 100), # 75
 
 		################### LTD/LTP  ###################
 		@model_jump(76, nu, u[36] * D_rate), # 76
 		@model_jump(77, nu, u[37] * P_rate), # 77
 		@model_jump(78, nu, u[36] * P_rate), # 78
 		@model_jump(79, nu, u[38] * D_rate), # 79
+
+		################### R-type VGCC ###################
+		@model_jump(56, nu, u[25] * alpha_m_r * frwd_VGCC, u[25] * max_m_r * frwd_VGCC, 10), # 56
+		@model_jump(57, nu, u[26] * beta_m_r  * bcwd_VGCC, u[26] * max_m_r * frwd_VGCC, 10), # 57
+		@model_jump(58, nu, u[25] * alpha_h_r * frwd_VGCC, u[25] * max_h_r * frwd_VGCC, 10), # 58
+		@model_jump(59, nu, u[27] * beta_h_r  * bcwd_VGCC, u[27] * max_h_r * bcwd_VGCC, 10), # 59
+		@model_jump(60, nu, u[26] * alpha_h_r * frwd_VGCC, u[26] * max_h_r * frwd_VGCC, 10), # 60
+		@model_jump(61, nu, u[28] * beta_h_r  * bcwd_VGCC, u[28] * max_h_r * bcwd_VGCC, 10), # 61
+		@model_jump(62, nu, u[27] * alpha_m_r * frwd_VGCC, u[27] * max_m_r * frwd_VGCC, 10), # 62
+		@model_jump(63, nu, u[28] * beta_m_r  * bcwd_VGCC, u[28] * max_m_r * bcwd_VGCC, 10), # 63
+
+
+		################### T-type VGCC  ###################
+		@model_jump(64, nu, u[29] * alpha_m_t * frwd_VGCC, u[29] * max_m_t * frwd_VGCC, 10), # 64
+		@model_jump(65, nu, u[30] * beta_m_t  * bcwd_VGCC, u[30] * max_m_t * bcwd_VGCC, 10), # 65 this one can have a high rate
+		@model_jump(66, nu, u[29] * alpha_h_t * frwd_VGCC, u[29] * max_h_t * frwd_VGCC, 10), # 66
+		@model_jump(67, nu, u[31] * beta_h_t  * bcwd_VGCC, u[31] * max_h_t * bcwd_VGCC, 10), # 67
+		@model_jump(68, nu, u[30] * alpha_h_t * frwd_VGCC, u[30] * max_h_t * frwd_VGCC, 10), # 68
+		@model_jump(69, nu, u[32] * beta_h_t  * bcwd_VGCC, u[32] * max_h_t * bcwd_VGCC, 10), # 69
+		@model_jump(70, nu, u[31] * alpha_m_t * frwd_VGCC, u[31] * max_m_t * frwd_VGCC, 10), # 70
+		@model_jump(71, nu, u[32] * beta_m_t  * bcwd_VGCC, u[32] * max_m_t * bcwd_VGCC, 10), # 71, this one can have a high rate
+
+
+		################### L-type VGCC  ###################
+		@model_jump(72, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, 10), # 72
+		@model_jump(73, nu, u[34] * beta_1_l * bcwd_VGCC, u[34] * max_beta_1_l * bcwd_VGCC, 10), # 73
+		@model_jump(74, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, 10), # 74
+		@model_jump(75, nu, u[35] * beta_2_l * bcwd_VGCC, u[35] * max_beta_2_l * bcwd_VGCC, 10), # 75
 	]
 
 	return p, jumps
@@ -478,12 +485,24 @@ function buildRxDependencyGraph(nu)
 			continue 
 		end
 		for (spec, _) in zip(findnz(nu[rx, :])...)
-			if rx > 55
+			# we need to reorder the indices according to the order
+			# they apper in the problem
+			if 56 <= rx < 76
+				rx += 23
+			elseif 76 <= rx < 80
 				rx -= 1
+			elseif rx >= 80
+				rx -= 25
 			end
 			for (dependent_rx, _) in zip(findnz(nu[:, spec])...)
-				if dependent_rx > 55
+				# we need to reorder the indices according to the order
+				# they apper in the problem
+				if 56 <= dependent_rx < 76
+					dependent_rx += 23
+				elseif 76 <= dependent_rx < 80
 					dependent_rx -= 1
+				elseif dependent_rx >= 80
+					dependent_rx -= 25
 				end
 				push!(dep_graph[rx], dependent_rx)
 			end
