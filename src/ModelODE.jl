@@ -170,40 +170,40 @@ function G_synapse(du, u, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
 		-kf_K2N*(Ca^2)*KCaM0 - kf_K2N*(Ca^2)*KCaM2C
 
 	### Xdot update
-	u[51] = ∂Vsp
-	u[52] = ∂Vdend
-	u[53] = ∂Vsoma
-	u[54] = ∂λ
-	u[55] = ∂ImbufCa
-	u[56] = ∂Ca
-	u[57] = ∂Dye
-	u[58] = ∂CaM0
-	u[59] = ∂CaM2C
-	u[60] = ∂CaM2N
-	u[61] = ∂CaM4
-	u[62] = ∂mCaN
-	u[63] = ∂CaN4
-	u[64] = ∂mKCaM
-	u[65] = ∂KCaM0
-	u[66] = ∂KCaM2N
-	u[67] = ∂KCaM2C
-	u[68] = ∂KCaM4
-	u[69] = ∂PCaM0
-	u[70] = ∂PCaM2C
-	u[71] = ∂PCaM2N
-	u[72] = ∂PCaM4
-	u[73] = ∂P
-	u[74] = ∂P2
-	u[75] = ∂LTD
-	u[76] = ∂LTP
-	u[77] = ∂act_D
-	u[78] = ∂act_P
-	u[79] = ∂m
-	u[80] = ∂h
-	u[81] = ∂n
-	u[82] = ∂SK
-	u[83] = ∂λ_age
-	u[84] = ∂λ_aux
+	du[51] = ∂Vsp
+	du[52] = ∂Vdend
+	du[53] = ∂Vsoma
+	du[54] = ∂λ
+	du[55] = ∂ImbufCa
+	du[56] = ∂Ca
+	du[57] = ∂Dye
+	du[58] = ∂CaM0
+	du[59] = ∂CaM2C
+	du[60] = ∂CaM2N
+	du[61] = ∂CaM4
+	du[62] = ∂mCaN
+	du[63] = ∂CaN4
+	du[64] = ∂mKCaM
+	du[65] = ∂KCaM0
+	du[66] = ∂KCaM2N
+	du[67] = ∂KCaM2C
+	du[68] = ∂KCaM4
+	du[69] = ∂PCaM0
+	du[70] = ∂PCaM2C
+	du[71] = ∂PCaM2N
+	du[72] = ∂PCaM4
+	du[73] = ∂P
+	du[74] = ∂P2
+	du[75] = ∂LTD
+	du[76] = ∂LTP
+	du[77] = ∂act_D
+	du[78] = ∂act_P
+	du[79] = ∂m
+	du[80] = ∂h
+	du[81] = ∂n
+	du[82] = ∂SK
+	du[83] = ∂λ_age
+	du[84] = ∂λ_aux
 
 end
 
@@ -261,10 +261,12 @@ macro model_jump(i, nu, rate_ex, urate_ex = nothing, rateinterval_ex = nothing)
 		function rate(u, p, t)
 			@unpack_SynapseParams p[end]
 			$(assignments...)
+			# TODO: numerical errors can push the rate just below 0.0
 			return $rate_ex
 		end
 		function affect!(integrator)
 			for j in js
+				# numerical errors introduce errors in what should be a discrete variable
 				integrator.u[j] += $(esc(nu))[$(esc(i)), j]
 			end
 		end
@@ -446,32 +448,32 @@ function J_synapse(p_synapse::SynapseParams, nu, glu)
 		@model_jump(79, nu, u[38] * D_rate), # 79
 
 		################### R-type VGCC ###################
-		@model_jump(56, nu, u[25] * alpha_m_r * frwd_VGCC, u[25] * max_m_r * frwd_VGCC, 10), # 56
-		@model_jump(57, nu, u[26] * beta_m_r  * bcwd_VGCC, u[26] * max_m_r * frwd_VGCC, 10), # 57
-		@model_jump(58, nu, u[25] * alpha_h_r * frwd_VGCC, u[25] * max_h_r * frwd_VGCC, 10), # 58
-		@model_jump(59, nu, u[27] * beta_h_r  * bcwd_VGCC, u[27] * max_h_r * bcwd_VGCC, 10), # 59
-		@model_jump(60, nu, u[26] * alpha_h_r * frwd_VGCC, u[26] * max_h_r * frwd_VGCC, 10), # 60
-		@model_jump(61, nu, u[28] * beta_h_r  * bcwd_VGCC, u[28] * max_h_r * bcwd_VGCC, 10), # 61
-		@model_jump(62, nu, u[27] * alpha_m_r * frwd_VGCC, u[27] * max_m_r * frwd_VGCC, 10), # 62
-		@model_jump(63, nu, u[28] * beta_m_r  * bcwd_VGCC, u[28] * max_m_r * bcwd_VGCC, 10), # 63
+		@model_jump(56, nu, u[25] * alpha_m_r * frwd_VGCC, u[25] * max_m_r * frwd_VGCC, typemax(Float64)), # 56
+		@model_jump(57, nu, u[26] * beta_m_r  * bcwd_VGCC, u[26] * max_m_r * frwd_VGCC, typemax(Float64)), # 57
+		@model_jump(58, nu, u[25] * alpha_h_r * frwd_VGCC, u[25] * max_h_r * frwd_VGCC, typemax(Float64)), # 58
+		@model_jump(59, nu, u[27] * beta_h_r  * bcwd_VGCC, u[27] * max_h_r * bcwd_VGCC, typemax(Float64)), # 59
+		@model_jump(60, nu, u[26] * alpha_h_r * frwd_VGCC, u[26] * max_h_r * frwd_VGCC, typemax(Float64)), # 60
+		@model_jump(61, nu, u[28] * beta_h_r  * bcwd_VGCC, u[28] * max_h_r * bcwd_VGCC, typemax(Float64)), # 61
+		@model_jump(62, nu, u[27] * alpha_m_r * frwd_VGCC, u[27] * max_m_r * frwd_VGCC, typemax(Float64)), # 62
+		@model_jump(63, nu, u[28] * beta_m_r  * bcwd_VGCC, u[28] * max_m_r * bcwd_VGCC, typemax(Float64)), # 63
 
 
 		################### T-type VGCC  ###################
-		@model_jump(64, nu, u[29] * alpha_m_t * frwd_VGCC, u[29] * max_m_t * frwd_VGCC, 10), # 64
-		@model_jump(65, nu, u[30] * beta_m_t  * bcwd_VGCC, u[30] * max_m_t * bcwd_VGCC, 10), # 65 this one can have a high rate
-		@model_jump(66, nu, u[29] * alpha_h_t * frwd_VGCC, u[29] * max_h_t * frwd_VGCC, 10), # 66
-		@model_jump(67, nu, u[31] * beta_h_t  * bcwd_VGCC, u[31] * max_h_t * bcwd_VGCC, 10), # 67
-		@model_jump(68, nu, u[30] * alpha_h_t * frwd_VGCC, u[30] * max_h_t * frwd_VGCC, 10), # 68
-		@model_jump(69, nu, u[32] * beta_h_t  * bcwd_VGCC, u[32] * max_h_t * bcwd_VGCC, 10), # 69
-		@model_jump(70, nu, u[31] * alpha_m_t * frwd_VGCC, u[31] * max_m_t * frwd_VGCC, 10), # 70
-		@model_jump(71, nu, u[32] * beta_m_t  * bcwd_VGCC, u[32] * max_m_t * bcwd_VGCC, 10), # 71, this one can have a high rate
+		@model_jump(64, nu, u[29] * alpha_m_t * frwd_VGCC, u[29] * max_m_t * frwd_VGCC, typemax(Float64)), # 64
+		@model_jump(65, nu, u[30] * beta_m_t  * bcwd_VGCC, u[30] * max_m_t * bcwd_VGCC, typemax(Float64)), # 65 this one can have a high rate
+		@model_jump(66, nu, u[29] * alpha_h_t * frwd_VGCC, u[29] * max_h_t * frwd_VGCC, typemax(Float64)), # 66
+		@model_jump(67, nu, u[31] * beta_h_t  * bcwd_VGCC, u[31] * max_h_t * bcwd_VGCC, typemax(Float64)), # 67
+		@model_jump(68, nu, u[30] * alpha_h_t * frwd_VGCC, u[30] * max_h_t * frwd_VGCC, typemax(Float64)), # 68
+		@model_jump(69, nu, u[32] * beta_h_t  * bcwd_VGCC, u[32] * max_h_t * bcwd_VGCC, typemax(Float64)), # 69
+		@model_jump(70, nu, u[31] * alpha_m_t * frwd_VGCC, u[31] * max_m_t * frwd_VGCC, typemax(Float64)), # 70
+		@model_jump(71, nu, u[32] * beta_m_t  * bcwd_VGCC, u[32] * max_m_t * bcwd_VGCC, typemax(Float64)), # 71, this one can have a high rate
 
 
 		################### L-type VGCC  ###################
-		@model_jump(72, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, 10), # 72
-		@model_jump(73, nu, u[34] * beta_1_l * bcwd_VGCC, u[34] * max_beta_1_l * bcwd_VGCC, 10), # 73
-		@model_jump(74, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, 10), # 74
-		@model_jump(75, nu, u[35] * beta_2_l * bcwd_VGCC, u[35] * max_beta_2_l * bcwd_VGCC, 10), # 75
+		@model_jump(72, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, typemax(Float64)), # 72
+		@model_jump(73, nu, u[34] * beta_1_l * bcwd_VGCC, u[34] * max_beta_1_l * bcwd_VGCC, typemax(Float64)), # 73
+		@model_jump(74, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, typemax(Float64)), # 74
+		@model_jump(75, nu, u[35] * beta_2_l * bcwd_VGCC, u[35] * max_beta_2_l * bcwd_VGCC, typemax(Float64)), # 75
 	]
 
 	return p, jumps
