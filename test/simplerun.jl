@@ -19,18 +19,19 @@ is_pre_or_post_event = [true]
 nu = buildTransitionMatrix()
 
 # ODE time stepper
-algos = (CHV(:lsoda), CHV(:lsoda))
+# algos = (CHV(:lsoda), CHV(:lsoda))
 # algos = (CHV(CVODE_BDF()), CHV(CVODE_BDF()))
+algos = (CHV(AutoTsit5(Rosenbrock23())), CHV(AutoTsit5(Rosenbrock23())))
 # algos = (Tsit5(), Tsit5())
 # algos = (TRBDF2(), TRBDF2())
 # algos = (lsoda(), lsoda())
-algos = (AutoTsit5(Rosenbrock23()), AutoTsit5(Rosenbrock23()))
+# algos = (AutoTsit5(Rosenbrock23()), AutoTsit5(Rosenbrock23()))
 # algos = (CVODE_BDF(), CVODE_BDF())
 
 # Discrete aggregator
 # agg = nothing
-# agg = Direct()
-agg = CoevolveSynced()
+agg = Direct()
+# agg = CoevolveSynced()
 
 # simulate a single problem
 glu = 0.0
@@ -41,7 +42,7 @@ u = vcat(xc0, xd0)
 p, jumps = J_synapse(p_synapse, nu, glu)
 t1 = 0.
 t2 = 500.
-save_positions = (false, false)
+save_positions = (false, true)
 oprob = ODEProblem((du, u, p, t) -> G_synapse(du, u, p_synapse, t, events_bap, bap_by_epsp), u, 
 	(t1, t2), p)
 dep_graph = buildRxDependencyGraph(nu)
