@@ -3,23 +3,23 @@ function G_synapse(du, u, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
 	@unpack_SynapseParams p_synapse
 
 	##### Stochastic channels/receptors
-	n1_ampa   = u[14] # ampa subconductance 1
-	n2_ampa   = u[15] # ampa subconductance 2
-	n3_ampa   = u[16] # ampa subconductance 3
-	n1_nmda_A = u[22] # nmda subconductance 1
-	n2_nmda_A = u[23] # nmda subconductance 2
-	n1_nmda_B = u[44] # nmda subconductance 1
-	n2_nmda_B = u[45] # nmda subconductance 2
-	n_car     = u[28] # vgcc-R opened state
-	n_cat     = u[32] # vgcc-T opened state
-	n_cal     = u[34] + u[35] # vgcc-L opened states
-	n_gaba1   = u[49] # GABA opened state
-	n_gaba2   = u[50] # GABA opened state
+	n1_ampa   = u[48] # ampa subconductance 1
+	n2_ampa   = u[49] # ampa subconductance 2
+	n3_ampa   = u[50] # ampa subconductance 3
+	n1_nmda_A = u[56] # nmda subconductance 1
+	n2_nmda_A = u[57] # nmda subconductance 2
+	n1_nmda_B = u[78] # nmda subconductance 1
+	n2_nmda_B = u[79] # nmda subconductance 2
+	n_car     = u[62] # vgcc-R opened state
+	n_cat     = u[66] # vgcc-T opened state
+	n_cal     = u[68] + u[69] # vgcc-L opened states
+	n_gaba1   = u[83] # GABA opened state
+	n_gaba2   = u[84] # GABA opened state
 
 	##### Continuous variables
 	Vsp, Vdend, Vsoma, λ, ImbufCa, Ca, Dye, CaM0, CaM2C, CaM2N, CaM4, mCaN,
 	CaN4, mKCaM, KCaM0, KCaM2N, KCaM2C, KCaM4, PCaM0, PCaM2C, PCaM2N, PCaM4, P, P2,
-	LTD, LTP, act_D, act_P, m, h, n, SK, λ_age, λ_aux = u[51:end]
+	LTD, LTP, act_D, act_P, m, h, n, SK, λ_age, λ_aux = u[1:34]
 
 	##### plasticity prediction regions
 	CaMKII     = KCaM0 + KCaM2C + KCaM2N + KCaM4 + PCaM0 + PCaM2C + PCaM2N + PCaM4 + P + P2
@@ -170,46 +170,48 @@ function G_synapse(du, u, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
 		-kf_K2N*(Ca^2)*KCaM0 - kf_K2N*(Ca^2)*KCaM2C
 
 	### Xdot update
-	du[51] = ∂Vsp
-	du[52] = ∂Vdend
-	du[53] = ∂Vsoma
-	du[54] = ∂λ
-	du[55] = ∂ImbufCa
-	du[56] = ∂Ca
-	du[57] = ∂Dye
-	du[58] = ∂CaM0
-	du[59] = ∂CaM2C
-	du[60] = ∂CaM2N
-	du[61] = ∂CaM4
-	du[62] = ∂mCaN
-	du[63] = ∂CaN4
-	du[64] = ∂mKCaM
-	du[65] = ∂KCaM0
-	du[66] = ∂KCaM2N
-	du[67] = ∂KCaM2C
-	du[68] = ∂KCaM4
-	du[69] = ∂PCaM0
-	du[70] = ∂PCaM2C
-	du[71] = ∂PCaM2N
-	du[72] = ∂PCaM4
-	du[73] = ∂P
-	du[74] = ∂P2
-	du[75] = ∂LTD
-	du[76] = ∂LTP
-	du[77] = ∂act_D
-	du[78] = ∂act_P
-	du[79] = ∂m
-	du[80] = ∂h
-	du[81] = ∂n
-	du[82] = ∂SK
-	du[83] = ∂λ_age
-	du[84] = ∂λ_aux
+	du[1] = ∂Vsp
+	du[2] = ∂Vdend
+	du[3] = ∂Vsoma
+	du[4] = ∂λ
+	du[5] = ∂ImbufCa
+	du[6] = ∂Ca
+	du[7] = ∂Dye
+	du[8] = ∂CaM0
+	du[9] = ∂CaM2C
+	du[10] = ∂CaM2N
+	du[11] = ∂CaM4
+	du[12] = ∂mCaN
+	du[13] = ∂CaN4
+	du[14] = ∂mKCaM
+	du[15] = ∂KCaM0
+	du[16] = ∂KCaM2N
+	du[17] = ∂KCaM2C
+	du[18] = ∂KCaM4
+	du[19] = ∂PCaM0
+	du[20] = ∂PCaM2C
+	du[21] = ∂PCaM2N
+	du[22] = ∂PCaM4
+	du[23] = ∂P
+	du[24] = ∂P2
+	du[25] = ∂LTD
+	du[26] = ∂LTP
+	du[27] = ∂act_D
+	du[28] = ∂act_P
+	du[29] = ∂m
+	du[30] = ∂h
+	du[31] = ∂n
+	du[32] = ∂SK
+	du[33] = ∂λ_age
+	du[34] = ∂λ_aux
+
+	du[35:end] .= 0
 
 end
 
 macro model_jump(i, nu, rate_ex, urate_ex = nothing, rateinterval_ex = nothing)
 
-	assignments = Expr[]    
+	assignments = Expr[]
 
 	alpha_beta_regex = r"(alpha|beta)_(m_r|h_r|m_t|h_t|l|1_l|2_l)"
 	alpha_beta_matches = Set([m.match for m in eachmatch(alpha_beta_regex, "$rate_ex")])
@@ -222,7 +224,7 @@ macro model_jump(i, nu, rate_ex, urate_ex = nothing, rateinterval_ex = nothing)
 			end
 		end
 
-		push!(assignments, :(Vsp = u[51]))
+		push!(assignments, :(Vsp = u[1]))
 
 		if "alpha_m_r" in alpha_beta_matches || "beta_m_r" in alpha_beta_matches
 			push!(assignments, :((alpha_m_r, beta_m_r) = rates_m_r(Vsp)))
@@ -266,8 +268,8 @@ macro model_jump(i, nu, rate_ex, urate_ex = nothing, rateinterval_ex = nothing)
 		end
 		function affect!(integrator)
 			for j in js
-				# numerical errors introduce errors in what should be a discrete variable
-				integrator.u[j] += $(esc(nu))[$(esc(i)), j]
+				# TODO: numerical errors introduce errors in what should be a discrete variable
+				integrator.u[j+34] += $(esc(nu))[$(esc(i)), j]
 			end
 		end
 	end)
@@ -421,18 +423,17 @@ function J_synapse(p_synapse::SynapseParams, nu, glu)
 	reactants = (nu .< 0)
 	for i in ma_jumps_idx
 		js = findall(reactants[i, :])
-		stoich = [j => -nu[i, j] for j in js]
-		stoich_i = i - (i > 54 ? 25 : 0)
-		reactant_stoich[stoich_i] = stoich
+                stoich = [(j + 34) => -nu[i, j] for j in js]
+		rx = i - (i > 54 ? 25 : 0)
+		reactant_stoich[rx] = stoich
 	end
 
-	nets = (nu .> 0)
 	net_stoich = Vector{Vector{Pair{Int,Int}}}(undef, length(ma_jumps_idx))
 	for i in ma_jumps_idx
-		js, _ = findnz(nets[i, :])
-		stoich = [j => nu[i, j] for j in js]
-		stoich_i = i - (i > 54 ? 25 : 0)
-		net_stoich[stoich_i] = stoich
+		js, _ = findnz(nu[i, :])
+                stoich = [(j + 34) => nu[i, j] for j in js]
+		rx = i - (i > 54 ? 25 : 0)
+		net_stoich[rx] = stoich
 	end
 
 	param_idxs = 1:length(ma_jumps_idx)
@@ -441,39 +442,41 @@ function J_synapse(p_synapse::SynapseParams, nu, glu)
 	jumps = [
 		MassActionJump(reactant_stoich, net_stoich; scale_rates = false, param_idxs),
 
-		################### LTD/LTP  ###################
-		@model_jump(76, nu, u[36] * D_rate), # 76
-		@model_jump(77, nu, u[37] * P_rate), # 77
-		@model_jump(78, nu, u[36] * P_rate), # 78
-		@model_jump(79, nu, u[38] * D_rate), # 79
-
 		################### R-type VGCC ###################
-		@model_jump(56, nu, u[25] * alpha_m_r * frwd_VGCC, u[25] * max_m_r * frwd_VGCC, typemax(Float64)), # 56
-		@model_jump(57, nu, u[26] * beta_m_r  * bcwd_VGCC, u[26] * max_m_r * frwd_VGCC, typemax(Float64)), # 57
-		@model_jump(58, nu, u[25] * alpha_h_r * frwd_VGCC, u[25] * max_h_r * frwd_VGCC, typemax(Float64)), # 58
-		@model_jump(59, nu, u[27] * beta_h_r  * bcwd_VGCC, u[27] * max_h_r * bcwd_VGCC, typemax(Float64)), # 59
-		@model_jump(60, nu, u[26] * alpha_h_r * frwd_VGCC, u[26] * max_h_r * frwd_VGCC, typemax(Float64)), # 60
-		@model_jump(61, nu, u[28] * beta_h_r  * bcwd_VGCC, u[28] * max_h_r * bcwd_VGCC, typemax(Float64)), # 61
-		@model_jump(62, nu, u[27] * alpha_m_r * frwd_VGCC, u[27] * max_m_r * frwd_VGCC, typemax(Float64)), # 62
-		@model_jump(63, nu, u[28] * beta_m_r  * bcwd_VGCC, u[28] * max_m_r * bcwd_VGCC, typemax(Float64)), # 63
+		@model_jump(56, nu, u[59] * alpha_m_r * frwd_VGCC, u[59] * max_m_r * frwd_VGCC, typemax(Float64)), # 56
+		@model_jump(57, nu, u[60] * beta_m_r  * bcwd_VGCC, u[60] * max_m_r * frwd_VGCC, typemax(Float64)), # 57
+		@model_jump(58, nu, u[59] * alpha_h_r * frwd_VGCC, u[59] * max_h_r * frwd_VGCC, typemax(Float64)), # 58
+		@model_jump(59, nu, u[61] * beta_h_r  * bcwd_VGCC, u[61] * max_h_r * bcwd_VGCC, typemax(Float64)), # 59
+		@model_jump(60, nu, u[60] * alpha_h_r * frwd_VGCC, u[60] * max_h_r * frwd_VGCC, typemax(Float64)), # 60
+		@model_jump(61, nu, u[62] * beta_h_r  * bcwd_VGCC, u[62] * max_h_r * bcwd_VGCC, typemax(Float64)), # 61
+		@model_jump(62, nu, u[61] * alpha_m_r * frwd_VGCC, u[61] * max_m_r * frwd_VGCC, typemax(Float64)), # 62
+		@model_jump(63, nu, u[62] * beta_m_r  * bcwd_VGCC, u[62] * max_m_r * bcwd_VGCC, typemax(Float64)), # 63
 
 
 		################### T-type VGCC  ###################
-		@model_jump(64, nu, u[29] * alpha_m_t * frwd_VGCC, u[29] * max_m_t * frwd_VGCC, typemax(Float64)), # 64
-		@model_jump(65, nu, u[30] * beta_m_t  * bcwd_VGCC, u[30] * max_m_t * bcwd_VGCC, typemax(Float64)), # 65 this one can have a high rate
-		@model_jump(66, nu, u[29] * alpha_h_t * frwd_VGCC, u[29] * max_h_t * frwd_VGCC, typemax(Float64)), # 66
-		@model_jump(67, nu, u[31] * beta_h_t  * bcwd_VGCC, u[31] * max_h_t * bcwd_VGCC, typemax(Float64)), # 67
-		@model_jump(68, nu, u[30] * alpha_h_t * frwd_VGCC, u[30] * max_h_t * frwd_VGCC, typemax(Float64)), # 68
-		@model_jump(69, nu, u[32] * beta_h_t  * bcwd_VGCC, u[32] * max_h_t * bcwd_VGCC, typemax(Float64)), # 69
-		@model_jump(70, nu, u[31] * alpha_m_t * frwd_VGCC, u[31] * max_m_t * frwd_VGCC, typemax(Float64)), # 70
-		@model_jump(71, nu, u[32] * beta_m_t  * bcwd_VGCC, u[32] * max_m_t * bcwd_VGCC, typemax(Float64)), # 71, this one can have a high rate
-
+		@model_jump(64, nu, u[63] * alpha_m_t * frwd_VGCC, u[63] * max_m_t * frwd_VGCC, typemax(Float64)), # 64
+		@model_jump(65, nu, u[64] * beta_m_t  * bcwd_VGCC, u[64] * max_m_t * bcwd_VGCC, typemax(Float64)), # 65 this one can have a high rate
+		@model_jump(66, nu, u[63] * alpha_h_t * frwd_VGCC, u[63] * max_h_t * frwd_VGCC, typemax(Float64)), # 66
+		@model_jump(67, nu, u[65] * beta_h_t  * bcwd_VGCC, u[65] * max_h_t * bcwd_VGCC, typemax(Float64)), # 67
+		@model_jump(68, nu, u[64] * alpha_h_t * frwd_VGCC, u[64] * max_h_t * frwd_VGCC, typemax(Float64)), # 68
+		@model_jump(69, nu, u[66] * beta_h_t  * bcwd_VGCC, u[66] * max_h_t * bcwd_VGCC, typemax(Float64)), # 69
+		@model_jump(70, nu, u[65] * alpha_m_t * frwd_VGCC, u[65] * max_m_t * frwd_VGCC, typemax(Float64)), # 70
+		@model_jump(71, nu, u[66] * beta_m_t  * bcwd_VGCC, u[66] * max_m_t * bcwd_VGCC, typemax(Float64)), # 71, this one can have a high rate
 
 		################### L-type VGCC  ###################
-		@model_jump(72, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, typemax(Float64)), # 72
-		@model_jump(73, nu, u[34] * beta_1_l * bcwd_VGCC, u[34] * max_beta_1_l * bcwd_VGCC, typemax(Float64)), # 73
-		@model_jump(74, nu, u[33] * alpha_l  * frwd_VGCC, u[33] * max_alpha_l  * frwd_VGCC, typemax(Float64)), # 74
-		@model_jump(75, nu, u[35] * beta_2_l * bcwd_VGCC, u[35] * max_beta_2_l * bcwd_VGCC, typemax(Float64)), # 75
+		@model_jump(72, nu, u[67] * alpha_l  * frwd_VGCC, u[67] * max_alpha_l  * frwd_VGCC, typemax(Float64)), # 72
+		@model_jump(73, nu, u[68] * beta_1_l * bcwd_VGCC, u[68] * max_beta_1_l * bcwd_VGCC, typemax(Float64)), # 73
+		@model_jump(74, nu, u[67] * alpha_l  * frwd_VGCC, u[67] * max_alpha_l  * frwd_VGCC, typemax(Float64)), # 74
+		@model_jump(75, nu, u[69] * beta_2_l * bcwd_VGCC, u[69] * max_beta_2_l * bcwd_VGCC, typemax(Float64)), # 75
+
+		################### LTD/LTP  ###################
+		# TODO: determine correct bounds, this is just a guess based on plots of
+		# plasticityRate(u[28], 2, K_D) / t_P and plasticityRate(u[27], 2, K_D) / t_D)
+		@model_jump(76, nu, u[70] * D_rate, 1, typemax(Float64)), # 76
+		@model_jump(77, nu, u[71] * P_rate, 1, typemax(Float64)), # 77
+		@model_jump(78, nu, u[70] * P_rate, 1, typemax(Float64)), # 78
+		@model_jump(79, nu, u[72] * D_rate, 1, typemax(Float64)), # 79
+
 	]
 
 	return p, jumps
@@ -484,25 +487,21 @@ function buildRxDependencyGraph(nu)
 	dep_graph = [Vector{Int}() for n in 1:(numrxs-1)]
 	for rx in 1:numrxs
 		if rx == 55  # no need to track the Poisson process
-			continue 
+			continue
 		end
 		for (spec, _) in zip(findnz(nu[rx, :])...)
 			# we need to reorder the indices according to the order
 			# they apper in the problem
-			if 56 <= rx < 76
-				rx += 23
-			elseif 76 <= rx < 80
-				rx -= 1
+			if 56 <= rx < 80
+				rx += 19
 			elseif rx >= 80
 				rx -= 25
 			end
 			for (dependent_rx, _) in zip(findnz(nu[:, spec])...)
 				# we need to reorder the indices according to the order
 				# they apper in the problem
-				if 56 <= dependent_rx < 76
-					dependent_rx += 23
-				elseif 76 <= dependent_rx < 80
-					dependent_rx -= 1
+				if 56 <= dependent_rx < 80
+					dependent_rx += 19
 				elseif dependent_rx >= 80
 					dependent_rx -= 25
 				end
@@ -514,7 +513,7 @@ function buildRxDependencyGraph(nu)
 end
 
 function SynapseProblem(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu, algo, agg::Direct; save_positions = (false, true), kwargs...)
-	u = vcat(xd, xc)
+	u = vcat(xc, xd)
 	p, jumps = J_synapse(p_synapse, nu, glu)
 	oprob = ODEProblem((du, u, p, t) -> G_synapse(du, u, p_synapse, t, events_bap, bap_by_epsp), u,
 		(t1, t2), p)
@@ -523,9 +522,9 @@ function SynapseProblem(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse,
 end
 
 function SynapseProblem(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu, algo, agg::CoevolveSynced; save_positions = (false, true), kwargs...)
-	u = vcat(xd, xc)
+	u = vcat(xc, xd)
 	p, jumps = J_synapse(p_synapse, nu, glu)
-	oprob = ODEProblem((du, u, p, t) -> G_synapse(du, u, p_synapse, t, events_bap, bap_by_epsp), u, 
+	oprob = ODEProblem((du, u, p, t) -> G_synapse(du, u, p_synapse, t, events_bap, bap_by_epsp), u,
 		(t1, t2), p)
 	dep_graph = buildRxDependencyGraph(nu)
 	jprob = JumpProblem(oprob, agg, jumps...; dep_graph = dep_graph, save_positions = save_positions)

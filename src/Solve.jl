@@ -130,7 +130,9 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 	# update the progress bar
 	progress && next!(pbar; showvalues = [(:steps, length(events_sorted_times) + 1), (:t, p_synapse.t_end)])
 
-	@assert tt[end] == p_synapse.t_end "The simulation did not reach requested simulated time","complete simulated time"
+	if tt[end] != p_synapse.t_end 
+            @warn "The simulation did not reach requested simulated time."
+        end
 
 	return (t = tt, XC = XC, XD = XD)
 end
@@ -148,8 +150,8 @@ function formatSimResult!(res::ODESolution, XC, XD, tt)
 	else
 		u = VectorOfArray(res.u)
 	end
-	append!(XD, VectorOfArray([i[1:50] for i in u]))
-	append!(XC, VectorOfArray([i[51:84] for i in u]))
+	append!(XC, VectorOfArray([i[1:34] for i in u]))
+	append!(XD, VectorOfArray([i[35:84] for i in u]))
 	append!(tt, res.t)
 	nothing
 end
