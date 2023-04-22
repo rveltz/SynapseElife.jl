@@ -489,23 +489,25 @@ function buildRxDependencyGraph(nu)
 		if rx == 55  # no need to track the Poisson process
 			continue
 		end
+		rx_ix = rx
+		if 56 <= rx < 80
+			rx_ix += 19
+		elseif rx >= 80
+			rx_ix -= 25
+		end
 		for (spec, _) in zip(findnz(nu[rx, :])...)
 			# we need to reorder the indices according to the order
 			# they apper in the problem
-			if 56 <= rx < 80
-				rx += 19
-			elseif rx >= 80
-				rx -= 25
-			end
 			for (dependent_rx, _) in zip(findnz(nu[:, spec])...)
 				# we need to reorder the indices according to the order
 				# they apper in the problem
+				dependent_rx_ix = dependent_rx
 				if 56 <= dependent_rx < 80
-					dependent_rx += 19
+					dependent_rx_ix += 19
 				elseif dependent_rx >= 80
-					dependent_rx -= 25
+					dependent_rx_ix -= 25
 				end
-				push!(dep_graph[rx], dependent_rx)
+				push!(dep_graph[rx_ix], dependent_rx_ix)
 			end
 		end
 	end
