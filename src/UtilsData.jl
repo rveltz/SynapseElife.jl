@@ -520,6 +520,7 @@ function dataProtocol(paper)
 			for freq in [.5; .75 ; collect(1. : .25 : 6.) ; collect(6.5 : .5 : 9.); collect(10. : 2. : 20.);  collect(25. : 5. : 50.) ]
 				for pulses in collect(1: 1: 30)
 					for age in [35.]
+						# missing one arg
 						push!(data_protocol,[1 0. 0 0.    0.     pulses  freq    true     "BCM_$(age)_$(freq)_$(pulses)"  -0.5 "LTD" "$paper" 35. 1e3 2.5e3 1.5 0 0. 2. age "yes" "no" 0. 0. 200. 0. 0.])
 					end
 				end
@@ -538,8 +539,9 @@ function dataProtocol(paper)
 		########## not shown in the paper
 		if paper == "DudekBear92-sliding"
 			for freq in [.8 ; 1.0 ; 1.5 ; collect(2. : 1. : 9.) ; collect(10. : 5. : 50.) ; collect(60. : 10 : 100.) ]
-				for pulses in ollect(50: 50: 1200)
+				for pulses in collect(50: 50: 1200)
 					for age in [35.]
+						# missing one arg
 						push!(data_protocol,[1 0. 0 0.    0.     pulses  freq    true     "BCM_$(age)_$(freq)_$(pulses)"  -0.5 "LTD" "$paper" 25. 1e3 2.5e3 1.5 0 0. 3. age "yes" "no"  0. 0. 200. 0. 0.])
 					end
 				end
