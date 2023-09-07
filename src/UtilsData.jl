@@ -688,7 +688,9 @@ function dataProtocol(paper)
 		##########  Figure 5
 		if paper == "DudekBear93-TBS"
 			for age in collect(2.5:2.5:80)
+                # one arg too many
 				push!(data_protocol,[1 0. 0 0.    0.     4  100.    true     "TBS_$(age)"	 -0.5 "LTD" "$paper" 34. 1e3  2.5e3 1.5 10 200. 0. 0. 5. age "yes" "no" 0. 0. 200. 0. 0.])
+# suggestion #	push!(data_protocol,[1 0. 0 0.    0.     4  100.    true     "TBS_$(age)"	 -0.5 "LTD" "$paper" 34. 1e3  2.5e3 1.5 10 200. 0. 5. age "yes" "no" 0. 0. 200. 0. 0.])
 			end
 		end
 
@@ -839,7 +841,9 @@ function dataProtocol(paper)
 		if paper == "Mizuno01-LTP-Mg"
 			for Mg in [.0001]#; collect(.1:.1:1.);collect(1.2: .2:2.0)]
 				for pulses in [1; 3; 5; 10; 25; 50; 100; 150]
+						# missing one arg
 						push!(data_protocol,[1 0. 0 0.  0.     pulses  1.    true     "LTP_$(pulses)_$(Mg)"	 -0.5 "LTD" "$paper" 26. 3e3 2.4e3 Mg 0 0. 2. 12 "yes" "no" 0. 0. 200. 0. 0.])
+# suggestion #			push!(data_protocol,[1 0. 0 0.  0.     pulses  1.    true     "LTP_$(pulses)_$(Mg)"	 -0.5 "LTD" "$paper" 26. 3e3 2.4e3 Mg 0 0. 0. 2. 12 "yes" "no" 0. 0. 200. 0. 0.])
 				end
 			end
 		end
