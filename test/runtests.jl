@@ -1,4 +1,4 @@
-using Synapse
+using SynapseElife
 using Test
 
 include("simplerun.jl")

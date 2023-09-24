@@ -1,4 +1,4 @@
-using Revise, Synapse,
+using Revise, SynapseElife,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
@@ -73,7 +73,7 @@ for k in 2:8
 
 		@info "Extracting data..."
 		tt = result.t
-		out = Synapse.get_names(result.XC, result.XD)
+		out = SynapseElife.get_names(result.XC, result.XD)
 
 		CaMKII = out[:KCaM0] .+ out[:KCaM2C] .+ out[:KCaM2N] .+ out[:KCaM4] .+ out[:PCaM0] .+ out[:PCaM2C] .+ out[:PCaM2N] .+ out[:PCaM4] .+ out[:P] .+ out[:P2]
 		CaM = out[:CaM2C] .+ out[:CaM2N] .+ out[:CaM4]

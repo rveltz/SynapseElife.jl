@@ -1,4 +1,4 @@
-using Revise, Synapse,
+using Revise, SynapseElife,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
@@ -58,18 +58,18 @@ is_glu_release, Docked, Reserve, t_stp, glu_release_times, bap_by_epsp_times = s
 @show "number of releases $(sum(is_glu_release))"
 
 Random.seed!(7)
-	result = @time evolveSynapse(
-		xc0, xd0,
-		param_synapse,
-		events_times[events_times .< param_synapse.t_end],
-		is_pre_or_post_event,
-		ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes", bap_by_epsp_times, Float64[]), #optional BaP induced by EPSP
-		is_glu_release,
-		(CHV(CVODE_BDF(linear_solver=:GMRES)), CHV(CVODE_BDF(linear_solver=:GMRES)));
-		# (CHV(:lsoda), CHV(:lsoda));
-		abstol = 1e-6, reltol = 1e-5,
-		save_positions = (false, true),
-		verbose = true) # model function 0.25s
+result = @time evolveSynapse(
+	xc0, xd0,
+	param_synapse,
+	events_times[events_times .< param_synapse.t_end],
+	is_pre_or_post_event,
+	ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes", bap_by_epsp_times, Float64[]), #optional BaP induced by EPSP
+	is_glu_release,
+	(CHV(CVODE_BDF(linear_solver=:GMRES)), CHV(CVODE_BDF(linear_solver=:GMRES)));
+	# (CHV(:lsoda), CHV(:lsoda));
+	abstol = 1e-6, reltol = 1e-5,
+	save_positions = (false, true),
+	verbose = true) # model function 0.25s
 
 
 tt = result.t
@@ -186,7 +186,7 @@ gr()
 
 
 			tt = result.t
-			out=Synapse.get_names(result.XC, result.XD)
+			out=SynapseElife.get_names(result.XC, result.XD)
 
 		args = (color = :black, label = "", xlabel="time (ms)", xlim = [470, 570],alpha=.3,w=2,xticks=(collect(500:25:550),collect(0:25:50)))
 		plot!(tt, out[:Vsp]; subplot = 1, ylabel = "Voltage (mv)", args...)
@@ -250,7 +250,7 @@ gr()
 			verbose = false, progress = true) # model function
 
 	tt = result.t
-	out=Synapse.get_names(result.XC, result.XD)
+	out=SynapseElife.get_names(result.XC, result.XD)
 
 	args = (color = :black, label = "", xlabel="time (s)", w=2 )
 	plot!(tt/1000, out[:λ]; subplot = 4, ylabel = "BaP efficiency ", args...) |>display
@@ -317,7 +317,7 @@ gr()
 
 
 		tt = result.t
-		out = Synapse.get_names(result.XC, result.XD)
+		out = SynapseElife.get_names(result.XC, result.XD)
 
 		CaMKII  =  out[:KCaM0] .+ out[:KCaM2C] .+ out[:KCaM2N] .+ out[:KCaM4] .+ out[:PCaM0] .+ out[:PCaM2C] .+ out[:PCaM2N] .+ out[:PCaM4] .+ out[:P] .+ out[:P2]
 		CaM	 =   out[:CaM2C] .+ out[:CaM2N] .+ out[:CaM4]

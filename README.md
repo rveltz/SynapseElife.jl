@@ -34,7 +34,7 @@ pkg> add https://github.com/rveltz/SynapseElife.git
 You can then use it like
 
 ```julia
-using Synapse
+using SynapseElife
 ```
 
 ## Website
@@ -71,7 +71,7 @@ search: SynapseParams
 In order to know the parameters used in the model, you can do for example (for the presynaptic ones):
 
 ```julia
-using Synapse
+using SynapseElife
 ?PreSynapseParams
 ```
 

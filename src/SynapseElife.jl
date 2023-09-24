@@ -1,4 +1,4 @@
-module Synapse
+module SynapseElife
 	using Parameters, Distributions, Documenter, SparseArrays, DataFrames, ProgressMeter
 
 	using DocStringExtensions

@@ -1,4 +1,4 @@
-using Documenter, Synapse
+using Documenter, SynapseElife
 
 ENV["JULIA_DEBUG"]=Documenter
 

@@ -1,4 +1,4 @@
-name = "Synapse"
+name = "SynapseElife"
 uuid = "7cc9ea39-daa9-4846-be95-d8a08c9e3c85"
 authors = ["Yuri Rodrigues <yuri.rodrigues@inria.fr> and Romain Veltz <romain.veltz@inria.fr>"]
 version = "0.0.1"

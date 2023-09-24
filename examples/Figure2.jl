@@ -1,4 +1,4 @@
-using Revise, Synapse,
+using Revise, SynapseElife,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
@@ -79,7 +79,7 @@ function makeFigure2(;detailed::Bool = true)
 
 			@info "Extracting data..." length(result.t)
 			tt = result.t
-			out = Synapse.get_names(result.XC, result.XD)
+			out = SynapseElife.get_names(result.XC, result.XD)
 
 			CaMKII = getCamKII(result...)
 			CaM = getCaM(result...)

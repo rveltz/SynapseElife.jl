@@ -1,6 +1,6 @@
 # using Revise, Plots
 using Test
-using Synapse
+using SynapseElife
 using PiecewiseDeterministicMarkovProcesses, Sundials
 
 # this holds the spine parameters
