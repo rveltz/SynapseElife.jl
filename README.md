@@ -1,4 +1,4 @@
-# Synapse.jl
+# SynapseElife.jl
 
 | **Documentation** | **Build Status** | 
 |:-----------------:|:----------------:|
