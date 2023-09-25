@@ -3,7 +3,7 @@
 We show here a very basic simulation where we apply a glutamate pulse to the postsynaptic side.
 
 ```@example TUT
-using Plots, Synapse
+using Plots, SynapseElife
 using Sundials, LSODA # ODE solvers
 # we load this package to simulate this particular class of Markov processes
 using PiecewiseDeterministicMarkovProcesses
@@ -47,12 +47,12 @@ We can for example plot all the discrete variables
 
 ```@example TUT
 # plot the discrete variables
-Synapse.plot_discrete(result.t, result.XC, result.XD)
+SynapseElife.plot_discrete(result.t, result.XC, result.XD)
 ```
 
 We can also select a specific variable to be printed:
 
 ```@example TUT
 # plot specific variable
-Synapse.plot_variable(result.t, result.XC, result.XD, :Vsp; xlim = (480., 520))
+SynapseElife.plot_variable(result.t, result.XC, result.XD, :Vsp; xlim = (480., 520))
 ```

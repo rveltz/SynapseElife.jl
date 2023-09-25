@@ -35,23 +35,23 @@ evolveSynapse
 ## Utils
 
 ```@docs
-Synapse.statistics_jumps
+SynapseElife.statistics_jumps
 ```
 
 ```@docs
-Synapse.get_names
+SynapseElife.get_names
 ```
 
 ```@docs
-Synapse.plot_variable
+SynapseElife.plot_variable
 ```
 
 ```@docs
-Synapse.plot_discrete
+SynapseElife.plot_discrete
 ```
 
 ## Automatic Code generation
 
 ```@docs
-Synapse.extractReactionsCamKII
+SynapseElife.extractReactionsCamKII
 ```
