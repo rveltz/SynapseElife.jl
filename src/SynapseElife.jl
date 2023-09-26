@@ -1,5 +1,5 @@
 module SynapseElife
-	using Parameters, Distributions, Documenter, SparseArrays, DataFrames, ProgressMeter
+	using Parameters, Distributions, SparseArrays, DataFrames, ProgressMeter
 
 	using DocStringExtensions
 
