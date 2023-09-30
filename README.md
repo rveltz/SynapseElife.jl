@@ -25,7 +25,7 @@ To run the package `Synapse`, we need some bleeding edge versions of other packa
 To install the package, please run
 
 ```julia
-pkg> add https://github.com/rveltz/SynapseElife.git
+pkg> add SynapseElife
 ```
 
 > Note that this has to be done only once! You don't need to do it for every session

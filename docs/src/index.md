@@ -12,7 +12,7 @@ To install the package, please run
 
 ```julia
 pkg> add PiecewiseDeterministicMarkovProcesses#master
-pkg> add https://github.com/rveltz/SynapseElife.git
+pkg> add SynapseElife
 ```
 
 You can then use it like
