@@ -6,6 +6,7 @@ The tag simpler refers to the simplest implementation proposed by Chang.
 Note also that Calcineurin is added to reactions below.
 """
 ChangCaMKII_simpler = @reaction_network begin
+  @parameters kf_2C kb_2C kf_2N kb_2N kf_CaM0 kb_CaM0 kf_CaM2N kb_CaM2N kf_CaM2C kb_CaM2C kf_CaM4 kb_CaM4 kf_K2N kb_K2N kf_K2C kb_K2C F k1 k2 k4 k5 k3 kcanf kcanb
   (kf_2C,kb_2C), CaM0 + 2Ca ↔ CaM2C
   (kf_2N,kb_2N), CaM0 +  2Ca ↔ CaM2N
   (kf_2N,kb_2N), CaM2C + 2Ca ↔ CaM4
@@ -36,7 +37,7 @@ ChangCaMKII_simpler = @reaction_network begin
   (k4,k5), P ↔ P2
   (k3), P → mKCaM
 
-end kf_2C kb_2C kf_2N kb_2N kf_CaM0 kb_CaM0 kf_CaM2N kb_CaM2N kf_CaM2C kb_CaM2C kf_CaM4 kb_CaM4 kf_K2N kb_K2N kf_K2C kb_K2C F k1 k2 k4 k5 k3 kcanf kcanb
+end
 
 """
 $(SIGNATURES)
