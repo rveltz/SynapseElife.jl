@@ -36,7 +36,6 @@ ChangCaMKII_simpler = @reaction_network begin
 
   (k4,k5), P ↔ P2
   (k3), P → mKCaM
-
 end
 
 """
@@ -56,11 +55,51 @@ function extractReactionsCamKII(filename = "write-equation.txt")
 end
 
 function extractReactionsCamKII_prob()
-  u0_symbol = [:CaM0 => 1., :Ca => 1., :CaM2C => 1., :CaM2N => 1., :CaM4 => 1., :mCaN => 1., :CaN4 => 1., :mKCaM => 1., :KCaM0 => 1., :KCaM2N => 1., :KCaM2C => 1., :KCaM4 => 1., :PCaM0 => 1., :PCaM2N => 1., :PCaM2C => 1., :PCaM4 => 1., :P => 1., :P2 => 1., ]
+  u0_symbol = [:CaM0 => 1.,
+               :Ca => 1.,
+               :CaM2C => 1.,
+               :CaM2N => 1.,
+               :CaM4 => 1.,
+               :mCaN => 1.,
+               :CaN4 => 1.,
+               :mKCaM => 1.,
+               :KCaM0 => 1.,
+               :KCaM2N => 1.,
+               :KCaM2C => 1.,
+               :KCaM4 => 1.,
+               :PCaM0 => 1.,
+               :PCaM2N => 1.,
+               :PCaM2C => 1.,
+               :PCaM4 => 1.,
+               :P => 1.,
+               :P2 => 1.,
+               ]
 
   u0 = rand(length(u0_symbol))
 
-  par = (:kf_2C => 1.0, :kb_2C => 1.0, :kf_2N => 1.0, :kb_2N => 1.0, :kf_CaM0 => 1.0, :kb_CaM0 => 1.0, :kf_CaM2N => 1.0, :kb_CaM2N => 1.0, :kf_CaM2C => 1.0, :kb_CaM2C => 1.0, :kf_CaM4 => 1.0, :kb_CaM4 => 1.0, :kf_K2N => 1.0, :kb_K2N => 1.0, :kf_K2C => 1.0, :kb_K2C => 1.0, :F => 1.0, :k1 => 1.0, :k2 => 1.0, :k4 => 1.0, :k5 => 1.0, :k3 => 1.0, :kcanf => 1.0, :kcanb => 1.0)
-
+  par = (:kf_2C => 1.0,
+         :kb_2C => 1.0,
+         :kf_2N => 1.0,
+         :kb_2N => 1.0,
+         :kf_CaM0 => 1.0,
+         :kb_CaM0 => 1.0,
+         :kf_CaM2N => 1.0,
+         :kb_CaM2N => 1.0,
+         :kf_CaM2C => 1.0,
+         :kb_CaM2C => 1.0,
+         :kf_CaM4 => 1.0,
+         :kb_CaM4 => 1.0,
+         :kf_K2N => 1.0,
+         :kb_K2N => 1.0,
+         :kf_K2C => 1.0,
+         :kb_K2C => 1.0,
+         :F => 1.0,
+         :k1 => 1.0,
+         :k2 => 1.0,
+         :k4 => 1.0,
+         :k5 => 1.0,
+         :k3 => 1.0,
+         :kcanf => 1.0,
+         :kcanb => 1.0)
   oprob = ODEProblem(ChangCaMKII_simpler, u0, (0., 1.), par)
 end
