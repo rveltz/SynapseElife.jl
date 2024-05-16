@@ -101,8 +101,10 @@ end
 """
 $(SIGNATURES)
 
-Structure to describe a plasticity protocol
+Structure to describe a plasticity protocol "conoc"
+
 # Arguments
+- `paper` can be `"oconnor"`, `"Bittner"`, `"Goldings01"`, `"Buchenan"`, `"Tigaret_jitter_timespent"`, `"Tigaret_jitter_double_1"`, `"Poisson"`, `"Tigaret_jitter"`, `"Dudek_jitter"`, `"TigaretMellor16"`, `"TigaretMellor16_poisson"`, `"Sleep_age"`, `"Poisson_physiological_range"`, `"YannisDebanne20_freq"`, `"YannisDebanne20_freq_delay"`, `"YannisDebanne20_ratio"`, `"YannisDebanne20_inv"`, `"Tigaret_burst"`, `"Tigaret_burst_temp"`, `"Tigaret_burst_age"`, `"Tigaret_burst_freq"`, `"Tigaret_burst_ca"`, `"Tigaret_burst_dist"`, `"Tigaret_freq_1200"`, `"Tigaret_tripost"`, `"Tigaret_preburst"`, `"Tigaret_single"`, `"TigaretMellor_sparse"`, `"TigaretMellor_jitter_sparse"`, `"DudekBear92-BCM-Ca"`, `"DudekBear92-BCM"`, `"DudekBear92-BCM-900"`, `"DudekBear92-BCM-37"`, `"DudekBear92-BCM-33"`, `"DudekBear92-BCM-priming"`, `"DudekBear92_timespend"`, `"DudekBear92-100"`, `"DudekBear_short"`, `"FujiBito"`, `"DudekBear92-sliding"`, `"DudekBear92_temp"`, `"DudekBear92_Ca"`, `"DudekBear92_Mg"`, `"DudekBear92_dist"`, `"DudekBear92-Age"`, `"Blocking_age_control"`, `"Blocking_yNMDA"`, `"Blocking_oNMDA"`, `"Blocking_yBaP"`, `"Blocking_oBaP"`, `"Blocking_yGABA"`, `"Blocking_oGABA"`, `"DudekBear92_BCM_recovery"`, `"DudekBear93-LFS"`, `"DudekBear93-TBS"`, `"Cao-TBS"`, `"RecoverLTD"`, `"Chang19"`, `"Fujii_CaN"`, `"YannisDebanne20"`, `"YannisDebanne_temp"`, `"YannisDebanne_age"`, `"Meredith03-GABA"`, `"TigaretvsMeredith"`, `"YannisvsMeredith"`, `"WittenbergWang06_D"`, `"WittenbergWang06_B"`, `"WittenbergWang06_P"`, `"Mizuno01-LTP-Mg"`, `"Mizuno01LTP"`, `"Mizuno01LTD"`
 - `n_pre` number of presynaptic pulses
 - `delay_pre` delay between presynaptic pulses
 - `n_pos` number of postsynaptic pulses
@@ -915,7 +917,7 @@ end
 """
 $(SIGNATURES)
 
-Compute external stimulation times and indices for pre/post stimulation. Usually used with `dataProtocol` (see folder examples in `examples/`).
+Generate external stimulation times and indices for pre/post stimulation. Usually used with `dataProtocol` (see folder examples in `examples/`).
 
 # Output
 - `event_times` sorted list of external event times
