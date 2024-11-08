@@ -69,7 +69,7 @@ result = @time evolveSynapse(
 	# (CHV(:lsoda), CHV(:lsoda));
 	abstol = 1e-6, reltol = 1e-5,
 	save_positions = (false, true),
-	verbose = true) # model function 0.25s
+	verbose = true); # model function 0.25s
 
 
 tt = result.t
@@ -79,6 +79,7 @@ colorss = ColorSchemes.viridis
 limits_d(x) = (minimum(x) ;maximum(x))
 
 gr()
+begin	
 	l = @layout [[a{.5w} b{.3w}]; [c{.5w}  d{.3w}]; [e{.5w} f{.3w}]; [g{.5w} h{.3w}]]
 	Plots.plot(windowsize=(1.5*700 * .6,350*1.5),layout=l,grid=false)
 
@@ -122,9 +123,9 @@ gr()
 	val = XD[44,:] .+ XD[45,:]
 	plot!(tt,val,xlabel="time (ms)",label="GluN2B",ylabel="NMDAr",w=2.5,subplot=7,alpha=1,color=get(colorss, 0.75) ,linetype=:steppost,layout=l,
 	xticks=(collect(500:100:700),collect(0:100:200)),yticks=(collect(0:2:8))) |> display
-
+end
 ############################  Simulation 1 - panel c and d ################################
-gr()
+begin
 	l = @layout [[a{.5w} b{.5w}]; [c{.5w}  d{.5w}]]
 	Plots.plot(windowsize=(1.5*700 * .6,350*1),layout=l,grid=false)
 
@@ -242,7 +243,7 @@ gr()
 			param_synapse,
 			events_times[events_times .< param_synapse.t_end],
 			is_pre_or_post_event,
-			ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes",bap_by_epsp_times,Float64[]), #optional BaP induced by EPSP
+			ifelse(data_protocol[!,:AP_by_EPSP][k] == "yes", bap_by_epsp_times,Float64[]), #optional BaP induced by EPSP
 			is_glu_release,
 			(CHV(CVODE_BDF(linear_solver=:GMRES)), CHV(CVODE_BDF(linear_solver=:GMRES)));
 			abstol = 1e-6, reltol = 1e-5,
@@ -254,10 +255,9 @@ gr()
 
 	args = (color = :black, label = "", xlabel="time (s)", w=2 )
 	plot!(tt/1000, out[:λ]; subplot = 4, ylabel = "BaP efficiency ", args...) |>display
-
+end
 ############################  Simulation 1 - panel c and d ################################
-
-gr()
+begin
 	l = @layout [a ; b ; c]
 	Plots.plot(windowsize=(1*500, 1*400),layout=l,grid=false)
 
@@ -328,3 +328,4 @@ gr()
 		plot!(tt/1000, CaM; subplot = 1, ylabel = "CaM (μM)", args...)
 		plot!(tt/1000,  CaMKII;  subplot = 2, ylabel = "CaMKII (μM)", args...)
 		plot!(tt/1000,  CaN;  subplot = 3, ylabel = "CaN (μM)", args...)  |> display
+end
