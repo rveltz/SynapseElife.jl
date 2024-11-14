@@ -1,0 +1,2 @@
+function plot_variable end
+function plot_discrete end

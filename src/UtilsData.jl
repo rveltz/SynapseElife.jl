@@ -13,7 +13,7 @@ function statistics_jumps(t, xd; tspan = (0., Inf64))
 	@assert n[1] < n[2] "Perhaps you want to pass xd'?"
 	# sort xd by the number of jumps
 	Ind = findall((t .>= tspan[1]) .* (t .<= tspan[2]))
-	jps = div.(sum(abs, diff(xd[:,Ind], dims=2), dims=2), 2) |> vec
+	jps = div.(sum(abs, diff(xd[:, Ind], dims = 2), dims = 2), 2) |> vec
 	return 1:n[1], jps
 end
 
@@ -39,64 +39,11 @@ function get_names(xc, xd)
 	for (key,val) in enumerate(ModelNamesContinuous)
 		out[val] = xc[key,:]
 	end
-
 	return out
 end
-
-"""
-$(SIGNATURES)
-
-Plotting function
-
-# Arguments
-- `tt` times
-- `xc` continuous variable
-- `xd` discrete variable
-- `s::Symbol = :ampa` which variable to plot. Must be `:ampa, :nmda, :vgcc_t, :vgcc_r, :vgcc_l` or `:Vsp,:Vdend,:Vsoma,:λ,:ImbufCa,:Ca,:Dye,:CaM0,:CaM2C,:CaM2N,:CaM4,:mCaN,:CaN4,:mKCaM,:KCaM0,:KCaM2N,:KCaM2C,:KCaM4,:PCaM0,:PCaM2C,:PCaM2N,:PCaM4,:P,:P2,:LTD,:LTP,:LTD_act,:LTP_act,:m,:h,:n,:SK,:λ_age,:λ_aux`.
-
-# Optional arguments
-- all arguments from Plots.jl. For example `xlims=(0,10), legend=false`
-"""
-function plot_variable(tt, xc, xd, s = :ampa; tspan = (0., Inf64), kwargs...)
-	out = get_names(xc, xd)
-	if s in [:ampa, :nmda, :vgcc_t, :vgcc_r, :vgcc_l]
-		st = statistics_jumps(tt, out[s]'; tspan = tspan)
-	else
-		st = [0,0]
-	end
-	plot(tt, out[s]; title = "#jumps ($s) = $(sum(st[2]))", label = "$s", xlims = (tspan[1], min(tt[end], tspan[2])), kwargs...)
-end
-
-"""
-$(SIGNATURES)
-
-Plot all discrete variables.
-
-# Arguments
-- `tt` times
-- `xc` continuous variables (result from PDMP)
-- `xd` discrete variables (result from PDMP)
-
-# Optional arguments
-- all arguments from Plots.jl. For example `xlims = (0, 10), legend = false`
-"""
-function plot_discrete(tt, xc, xd; tspan = (0., Inf64), kwargs...)
-	outd = get_names(xc, xd)
-	Plots.plot(layout=(3,2))
-	for (ind, s) in enumerate([:ampa, :nmda, :vgcc_t, :vgcc_r, :vgcc_l])
-		st = statistics_jumps(tt, outd[s]'; tspan = tspan)
-		plot!(tt, outd[s]; title = "#jumps ($s) = $(sum(st[2]))", subplot=ind, label="", titlefontsize = 10, xlims = (tspan[1], min(tt[end], tspan[2])), line = :step, kwargs...) |> display
-	end
-	if :Vsp in keys(outd)
-		plot!(tt, outd[:Vsp]; title = "#jumps (Vsp) = 0", subplot=6, label="", titlefontsize = 10, xlims = (tspan[1], min(tt[end], tspan[2])),  kwargs...) |> display
-	end
-	Ind = (tt .> tspan[1]) .* (tt .< tspan[2])
-	annotate!(3000,1,"total #jumps = $(sum(Ind))",subplot=5)
-end
-
 ####################################################################################################
 
-
+_protocols = ["oconnor", "Bittner", "Goldings01", "Buchenan", "Tigaret_jitter_timespent", "Tigaret_jitter_double_1", "Poisson", "Tigaret_jitter", "Dudek_jitter", "TigaretMellor16", "TigaretMellor16_poisson", "Sleep_age", "Poisson_physiological_range", "YannisDebanne20_freq", "YannisDebanne20_freq_delay", "YannisDebanne20_ratio", "YannisDebanne20_inv", "Tigaret_burst", "Tigaret_burst_temp", "Tigaret_burst_age", "Tigaret_burst_freq", "Tigaret_burst_ca", "Tigaret_burst_dist", "Tigaret_freq_1200", "Tigaret_tripost", "Tigaret_preburst", "Tigaret_single", "TigaretMellor_sparse", "TigaretMellor_jitter_sparse", "DudekBear92-BCM-Ca", "DudekBear92-BCM", "DudekBear92-BCM-900", "DudekBear92-BCM-37", "DudekBear92-BCM-33", "DudekBear92-BCM-priming", "DudekBear92_timespend", "DudekBear92-100", "DudekBear_short", "FujiBito", "DudekBear92-sliding", "DudekBear92_temp", "DudekBear92_Ca", "DudekBear92_Mg", "DudekBear92_dist", "DudekBear92-Age", "Blocking_age_control", "Blocking_yNMDA", "Blocking_oNMDA", "Blocking_yBaP", "Blocking_oBaP", "Blocking_yGABA", "Blocking_oGABA", "DudekBear92_BCM_recovery", "DudekBear93-LFS", "DudekBear93-TBS", "Cao-TBS", "RecoverLTD", "Chang19", "Fujii_CaN", "YannisDebanne20", "YannisDebanne_temp", "YannisDebanne_age", "Meredith03-GABA", "TigaretvsMeredith", "YannisvsMeredith", "WittenbergWang06_D", "WittenbergWang06_B", "WittenbergWang06_P", "Mizuno01-LTP-Mg", "Mizuno01LTP", "Mizuno01LTD"]
 
 """
 $(SIGNATURES)
@@ -104,7 +51,7 @@ $(SIGNATURES)
 Structure to describe a plasticity protocol "conoc"
 
 # Arguments
-- `paper` can be `"oconnor"`, `"Bittner"`, `"Goldings01"`, `"Buchenan"`, `"Tigaret_jitter_timespent"`, `"Tigaret_jitter_double_1"`, `"Poisson"`, `"Tigaret_jitter"`, `"Dudek_jitter"`, `"TigaretMellor16"`, `"TigaretMellor16_poisson"`, `"Sleep_age"`, `"Poisson_physiological_range"`, `"YannisDebanne20_freq"`, `"YannisDebanne20_freq_delay"`, `"YannisDebanne20_ratio"`, `"YannisDebanne20_inv"`, `"Tigaret_burst"`, `"Tigaret_burst_temp"`, `"Tigaret_burst_age"`, `"Tigaret_burst_freq"`, `"Tigaret_burst_ca"`, `"Tigaret_burst_dist"`, `"Tigaret_freq_1200"`, `"Tigaret_tripost"`, `"Tigaret_preburst"`, `"Tigaret_single"`, `"TigaretMellor_sparse"`, `"TigaretMellor_jitter_sparse"`, `"DudekBear92-BCM-Ca"`, `"DudekBear92-BCM"`, `"DudekBear92-BCM-900"`, `"DudekBear92-BCM-37"`, `"DudekBear92-BCM-33"`, `"DudekBear92-BCM-priming"`, `"DudekBear92_timespend"`, `"DudekBear92-100"`, `"DudekBear_short"`, `"FujiBito"`, `"DudekBear92-sliding"`, `"DudekBear92_temp"`, `"DudekBear92_Ca"`, `"DudekBear92_Mg"`, `"DudekBear92_dist"`, `"DudekBear92-Age"`, `"Blocking_age_control"`, `"Blocking_yNMDA"`, `"Blocking_oNMDA"`, `"Blocking_yBaP"`, `"Blocking_oBaP"`, `"Blocking_yGABA"`, `"Blocking_oGABA"`, `"DudekBear92_BCM_recovery"`, `"DudekBear93-LFS"`, `"DudekBear93-TBS"`, `"Cao-TBS"`, `"RecoverLTD"`, `"Chang19"`, `"Fujii_CaN"`, `"YannisDebanne20"`, `"YannisDebanne_temp"`, `"YannisDebanne_age"`, `"Meredith03-GABA"`, `"TigaretvsMeredith"`, `"YannisvsMeredith"`, `"WittenbergWang06_D"`, `"WittenbergWang06_B"`, `"WittenbergWang06_P"`, `"Mizuno01-LTP-Mg"`, `"Mizuno01LTP"`, `"Mizuno01LTD"`
+- `paper` can be `$_protocols`
 - `n_pre` number of presynaptic pulses
 - `delay_pre` delay between presynaptic pulses
 - `n_pos` number of postsynaptic pulses
