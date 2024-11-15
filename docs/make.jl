@@ -14,6 +14,6 @@ makedocs(doctest = false,
 	)
 	
 deploydocs(
-	repo = "github.com/rveltz/SynapseElife.git",
+	repo = "github.com/rveltz/SynapseElife.jl.git",
 	devbranch = "main"
 )
