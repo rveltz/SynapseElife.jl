@@ -1,7 +1,7 @@
 name = "SynapseElife"
 uuid = "7cc9ea39-daa9-4846-be95-d8a08c9e3c85"
 authors = ["Yuri Rodrigues <yuri.rodrigues@inria.fr> and Romain Veltz <romain.veltz@inria.fr>"]
-version = "0.0.3"
+version = "0.0.4"
 
 [deps]
 Catalyst = "479239e8-5488-4da2-87a7-35f2df7eef83"
