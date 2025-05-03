@@ -1,7 +1,7 @@
 name = "SynapseElife"
 uuid = "7cc9ea39-daa9-4846-be95-d8a08c9e3c85"
 authors = ["Yuri Rodrigues <yuri.rodrigues@inria.fr> and Romain Veltz <romain.veltz@inria.fr>"]
-version = "0.0.4"
+version = "0.0.5"
 
 [deps]
 Catalyst = "479239e8-5488-4da2-87a7-35f2df7eef83"
@@ -34,7 +34,7 @@ DocStringExtensions = "^0.8, ^0.9"
 LabelledArrays = "1.14"
 LazySets = "^2, ^3, ^4"
 Parameters = "0.12"
-PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7, ^0.0.8, ^0.0.9"
+PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7, ^0.0.8, ^0.0.9, ^0.0.10"
 Plots = "1.39, ^1.40"
 ProgressMeter = "1.9, ^1.10"
 RecursiveArrayTools = "2.8, 2.9, ^3"
