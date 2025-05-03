@@ -424,14 +424,14 @@ end
 Same as `evolveSynapse` but do not format the output because it takes time.
 """
 function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
-		events_sorted_times,
-		is_pre_or_post_event,
-		bap_by_epsp,
-		is_glu_released,
-		algos;
-		verbose = false, progress = false,
-		abstol = 1e-8, reltol = 1e-7, save_positions = (false, true),
-		nu = buildTransitionMatrix(), kwargs...) where T
+								events_sorted_times,
+								is_pre_or_post_event,
+								bap_by_epsp,
+								is_glu_released,
+								algos;
+								verbose = false, progress = false,
+								abstol = 1e-8, reltol = 1e-7, save_positions = (false, true),
+								nu = buildTransitionMatrix(), kwargs...) where T
 
 	if save_positions isa Tuple{Bool, Bool}
 		save_positionsON = save_positions
