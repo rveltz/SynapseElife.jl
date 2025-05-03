@@ -27,18 +27,18 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlotsExt = ["Plots"]
 
 [compat]
-Catalyst = "^10.4.2,11,12,13"
+Catalyst = "^10.4.2,11,12,13,14,15"
 DataFrames = "1.6"
 Distributions = "0.25"
 DocStringExtensions = "^0.8, ^0.9"
 LabelledArrays = "1.14"
-LazySets = "^2"
+LazySets = "^2, ^3, ^4"
 Parameters = "0.12"
 PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7, ^0.0.8, ^0.0.9"
-Plots = "1.39"
-ProgressMeter = "1.9"
+Plots = "1.39, ^1.40"
+ProgressMeter = "1.9, ^1.10"
 RecursiveArrayTools = "2.8, 2.9, ^3"
-StaticArrays = "1.6, 1.7, 1.8, 1.9"
+StaticArrays = "1.6, 1.7, 1.8, ^1.9"
 StatsBase = "0.33, 0.34"
 julia = "^1.9"
 
