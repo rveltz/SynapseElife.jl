@@ -1,6 +1,6 @@
 using Documenter, SynapseElife
 using Pkg
-pkg"dev Plots"
+# pkg"dev Plots"
 
 ENV["JULIA_DEBUG"]=Documenter
 
