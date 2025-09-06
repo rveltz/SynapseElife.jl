@@ -366,7 +366,7 @@ function pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu
 		(rate, xc, xd, p, t, sum_rate) -> R_synapse(rate, xc, xd, p, t, sum_rate, glu),
 		nu, xc, xd, p_synapse, (t1, t2);
 		Ncache = 12) # this option is for AD in PreallocationTools
-	return solve(problem, algo ;kwargs...)
+	return solve(problem, algo; kwargs...)
 end
 
 """
