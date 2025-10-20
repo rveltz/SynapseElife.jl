@@ -1,7 +1,7 @@
 name = "SynapseElife"
 uuid = "7cc9ea39-daa9-4846-be95-d8a08c9e3c85"
-authors = ["Yuri Rodrigues <yuri.rodrigues@inria.fr> and Romain Veltz <romain.veltz@inria.fr>"]
 version = "0.0.5"
+authors = ["Yuri Rodrigues <yuri.rodrigues@inria.fr> and Romain Veltz <romain.veltz@inria.fr>"]
 
 [deps]
 Catalyst = "479239e8-5488-4da2-87a7-35f2df7eef83"
@@ -32,7 +32,7 @@ DataFrames = "1.6"
 Distributions = "0.25"
 DocStringExtensions = "^0.8, ^0.9"
 LabelledArrays = "1.14"
-LazySets = "^2, ^3, ^4"
+LazySets = "^2, ^3, ^4, 5"
 Parameters = "0.12"
 PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7, ^0.0.8, ^0.0.9, ^0.0.10"
 Plots = "1.39, ^1.40"
@@ -43,9 +43,9 @@ StatsBase = "0.33, 0.34"
 julia = "^1.9"
 
 [extras]
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
 LSODA = "7f56f5a3-f504-529b-bc02-0b1fe5e64312"
 Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
-DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
