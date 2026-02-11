@@ -54,7 +54,12 @@ xc0 = initial_conditions_continuous_temp(param_synapse) # initial conditions det
 xd0 = initial_conditions_discrete(param_synapse)		# initial conditions stochastic channels
 
 # RUN PRESYNAPTIC MODEL
-is_glu_release, Docked, Reserve, t_stp, glu_release_times, bap_by_epsp_times = stp(param_synapse.t_end, pre_synapse, events_times, is_pre_or_post_event, _plot = false, algo = CHV(CVODE_BDF()))
+is_glu_release, Docked, Reserve, t_stp, glu_release_times, bap_by_epsp_times = stp(param_synapse.t_end, 
+						pre_synapse, 
+						events_times, 
+						is_pre_or_post_event, 
+						_plot = false, 
+						algo = CHV(CVODE_BDF()))
 @show "number of releases $(sum(is_glu_release))"
 
 Random.seed!(7)
@@ -251,7 +256,7 @@ begin
 			verbose = false, progress = true) # model function
 
 	tt = result.t
-	out=SynapseElife.get_names(result.XC, result.XD)
+	out = SynapseElife.get_names(result.XC, result.XD)
 
 	args = (color = :black, label = "", xlabel="time (s)", w=2 )
 	plot!(tt/1000, out[:λ]; subplot = 4, ylabel = "BaP efficiency ", args...) |>display

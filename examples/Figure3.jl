@@ -56,7 +56,7 @@ for k in 2:8
 		@info data_protocol[k,:protocol]
 		@show "number of releases $(sum(is_glu_release))"
 
-		ode = :lsoda
+		# ode = :lsoda
 		ode = CVODE_BDF(linear_solver=:GMRES)
 
 		result = @time evolveSynapse(

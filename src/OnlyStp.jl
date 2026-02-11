@@ -139,7 +139,7 @@ function stp_evolve_synapse(t_end,
 
 	for (countloop, event) in enumerate(prespike)
 		################### Glutamate  ###################
-		res = stpPDMP(res.xc[:,end], res.xd[:,end], par_pre, nu, tt[end], event; kwargs...)
+		res = stpPDMP(res.xc[:, end], res.xd[:, end], par_pre, nu, tt[end], event; kwargs...)
 
 		append!(XC, res.xc); append!(XD, res.xd); append!(tt, res.time)
 
@@ -206,11 +206,11 @@ function stp(t_end, param,
 			kwargs...)
 	# presynaptic spikes
 	_prespike = all_events_times[is_pre_or_post_index .== true ]
-	prespike = _prespike[_prespike.<t_end]
+	prespike = _prespike[_prespike .< t_end]
 
 	tt, XC, XD, glu_release_times, bap_by_epsp_times = stp_evolve_synapse(
 				t_end,
-				[0., 1. , 0.],
+				[0., 1 , 0],
 				[0, param.D_0, param.R_0],
 				param,
 				prespike,

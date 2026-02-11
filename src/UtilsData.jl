@@ -812,7 +812,7 @@ function PoissonProcess(rate, start_time, end_time)
 	post = [start_time]
 		while true
 			#ISI is exponential(rate)
-			dt = rand(Exponential(1000/rate))
+			dt = rand(Exponential(1000 / rate))
 			if post[end] + dt > end_time
 				break
 			else
@@ -824,18 +824,18 @@ end
 #########################################
 rates_adapt(a, b, c, d, Ca) = a * b /(c + d * Ca)
 ########################### Passing the var names to the sim outcome
-function passing(s, XC)
+function passing(s::Vector, XC)
 	for i in 1:length(s)
-		sy=s[i]
-		value=XC[i,:]
-		@eval (($sy)=($value))
+		sy = s[i]
+		value = XC[i,:]
+		@eval (($sy) = ($value))
 	end
 end
 #########################################
 function integrate(tt, vals)
 	res = zero(eltype(tt))
 	for i in 1:(length(tt)-1)
-		res = res + (tt[i+1]-tt[i]) *(vals[i+1] + vals[i]) / 2
+		res = res + (tt[i+1]-tt[i]) * (vals[i+1] + vals[i]) / 2
 	end
 	return res
 end
@@ -1185,8 +1185,7 @@ end
 
 function initial_conditions_discrete(param_synapse)
 	@unpack_SynapseParams param_synapse
-
-  return vec([
+	return vec([
 		  N_ampa,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,   #AMPA		 1-16
 		  N_N2A,0,0,0,0,0,0,					  #NMDA		 17-23
 		  0,									  #print	 24
@@ -1200,8 +1199,7 @@ end
 
 function initial_conditions_ds(param_synapse)
 	@unpack_SynapseParams param_synapse
-
-  return vec([
+	return vec([
 		  N_ampa,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,   #AMPA		 1-16
 		  N_N2A,0,0,0,0,0,0,					  #NMDA		 17-23
 		  0,									  #print	 24
