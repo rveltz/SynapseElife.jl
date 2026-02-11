@@ -26,24 +26,128 @@ $(SIGNATURES)
 Another use is for plotting.
 """
 function get_names(xc, xd)
-	out = Dict{Symbol, Union{Array{Float64,1}, Adjoint{Int64,Array{Int64,2}}}}()
-	out[:ampa]	   = xd[1:16,:]'
-	out[:nmda]	   = xd[17:23,:]'
-	out[:sampling] = xd[24:24,:]'
-	out[:vgcc_r]   = xd[25:28,:]'
-	out[:vgcc_t]   = xd[29:32,:]'
-	out[:vgcc_l]   = xd[33:35,:]'
-	out[:lt]	   = xd[36:38,:]'
+	# out = Dict{Symbol, Union{Array{Float64,1}, Adjoint{Int64,Array{Int64,2}}}}()
+	out_d = Dict(:ampa => view(xd,1:16,:)')
+	out_d[:nmda]	  = view(xd,17:23,:)'
+	out_d[:sampling] = view(xd,24:24,:)'
+	out_d[:vgcc_r]   = view(xd,25:28,:)'
+	out_d[:vgcc_t]   = view(xd,29:32,:)'
+	out_d[:vgcc_l]   = view(xd,33:35,:)'
+	out_d[:lt]	      = view(xd,36:38,:)'
 
-	ModelNamesContinuous = [:Vsp,:Vdend,:Vsoma,:λ,:ImbufCa,:Ca,:Dye,:CaM0,:CaM2C,:CaM2N,:CaM4,:mCaN,:CaN4,:mKCaM,:KCaM0,:KCaM2N,:KCaM2C,:KCaM4,:PCaM0,:PCaM2C,:PCaM2N,:PCaM4,:P,:P2,:LTD,:LTP,:LTD_act,:LTP_act,:m,:h,:n,:SK,:λ_age,:λ_aux]
-	for (key,val) in enumerate(ModelNamesContinuous)
-		out[val] = xc[key,:]
+	ModelNamesContinuous = [:Vsp,
+							:Vdend,
+							:Vsoma,
+							:λ,
+							:ImbufCa,
+							:Ca,
+							:Dye,
+							:CaM0,
+							:CaM2C,
+							:CaM2N,
+							:CaM4,
+							:mCaN,
+							:CaN4,
+							:mKCaM,
+							:KCaM0,
+							:KCaM2N,
+							:KCaM2C,
+							:KCaM4,
+							:PCaM0,
+							:PCaM2C,
+							:PCaM2N,
+							:PCaM4,
+							:P,
+							:P2,
+							:LTD,
+							:LTP,
+							:LTD_act,
+							:LTP_act,
+							:m,
+							:h,
+							:n,
+							:SK,
+							:λ_age,
+							:λ_aux]
+	out_c = Dict(:Vsp => view(xc, 1, :))
+	for (key, val) in enumerate(ModelNamesContinuous[2:end])
+		out_c[val] = view(xc, key, :)
 	end
-	return out
+	return merge(out_c, out_d)
 end
 ####################################################################################################
-
-_protocols = ["oconnor", "Bittner", "Goldings01", "Buchenan", "Tigaret_jitter_timespent", "Tigaret_jitter_double_1", "Poisson", "Tigaret_jitter", "Dudek_jitter", "TigaretMellor16", "TigaretMellor16_poisson", "Sleep_age", "Poisson_physiological_range", "YannisDebanne20_freq", "YannisDebanne20_freq_delay", "YannisDebanne20_ratio", "YannisDebanne20_inv", "Tigaret_burst", "Tigaret_burst_temp", "Tigaret_burst_age", "Tigaret_burst_freq", "Tigaret_burst_ca", "Tigaret_burst_dist", "Tigaret_freq_1200", "Tigaret_tripost", "Tigaret_preburst", "Tigaret_single", "TigaretMellor_sparse", "TigaretMellor_jitter_sparse", "DudekBear92-BCM-Ca", "DudekBear92-BCM", "DudekBear92-BCM-900", "DudekBear92-BCM-37", "DudekBear92-BCM-33", "DudekBear92-BCM-priming", "DudekBear92_timespend", "DudekBear92-100", "DudekBear_short", "FujiBito", "DudekBear92-sliding", "DudekBear92_temp", "DudekBear92_Ca", "DudekBear92_Mg", "DudekBear92_dist", "DudekBear92-Age", "Blocking_age_control", "Blocking_yNMDA", "Blocking_oNMDA", "Blocking_yBaP", "Blocking_oBaP", "Blocking_yGABA", "Blocking_oGABA", "DudekBear92_BCM_recovery", "DudekBear93-LFS", "DudekBear93-TBS", "Cao-TBS", "RecoverLTD", "Chang19", "Fujii_CaN", "YannisDebanne20", "YannisDebanne_temp", "YannisDebanne_age", "Meredith03-GABA", "TigaretvsMeredith", "YannisvsMeredith", "WittenbergWang06_D", "WittenbergWang06_B", "WittenbergWang06_P", "Mizuno01-LTP-Mg", "Mizuno01LTP", "Mizuno01LTD"]
+_protocols = ["oconnor",
+				"Bittner",
+				"Goldings01",
+				"Buchenan",
+				"Tigaret_jitter_timespent",
+				"Tigaret_jitter_double_1",
+				"Poisson",
+				"Tigaret_jitter",
+				"Dudek_jitter",
+				"TigaretMellor16",
+				"TigaretMellor16_poisson",
+				"Sleep_age",
+				"Poisson_physiological_range",
+				"YannisDebanne20_freq",
+				"YannisDebanne20_freq_delay",
+				"YannisDebanne20_ratio",
+				"YannisDebanne20_inv",
+				"Tigaret_burst",
+				"Tigaret_burst_temp",
+				"Tigaret_burst_age",
+				"Tigaret_burst_freq",
+				"Tigaret_burst_ca",
+				"Tigaret_burst_dist",
+				"Tigaret_freq_1200",
+				"Tigaret_tripost",
+				"Tigaret_preburst",
+				"Tigaret_single",
+				"TigaretMellor_sparse",
+				"TigaretMellor_jitter_sparse",
+				"DudekBear92-BCM-Ca",
+				"DudekBear92-BCM",
+				"DudekBear92-BCM-900",
+				"DudekBear92-BCM-37",
+				"DudekBear92-BCM-33",
+				"DudekBear92-BCM-priming",
+				"DudekBear92_timespend",
+				"DudekBear92-100",
+				"DudekBear_short",
+				"FujiBito",
+				"DudekBear92-sliding",
+				"DudekBear92_temp",
+				"DudekBear92_Ca",
+				"DudekBear92_Mg",
+				"DudekBear92_dist",
+				"DudekBear92-Age",
+				"Blocking_age_control",
+				"Blocking_yNMDA",
+				"Blocking_oNMDA",
+				"Blocking_yBaP",
+				"Blocking_oBaP",
+				"Blocking_yGABA",
+				"Blocking_oGABA",
+				"DudekBear92_BCM_recovery",
+				"DudekBear93-LFS",
+				"DudekBear93-TBS",
+				"Cao-TBS",
+				"RecoverLTD",
+				"Chang19",
+				"Fujii_CaN",
+				"YannisDebanne20",
+				"YannisDebanne_temp",
+				"YannisDebanne_age",
+				"Meredith03-GABA",
+				"TigaretvsMeredith",
+				"YannisvsMeredith",
+				"WittenbergWang06_D",
+				"WittenbergWang06_B",
+				"WittenbergWang06_P",
+				"Mizuno01-LTP-Mg",
+				"Mizuno01LTP",
+				"Mizuno01LTD"
+			]
 
 """
 $(SIGNATURES)
@@ -81,34 +185,35 @@ Structure to describe a plasticity protocol "conoc"
 """
 function dataProtocol(paper)
 	 	data_protocol = DataFrame(
-		n_pre         = Int64[],
-		delay_pre     = Float64[],
-		n_pos         = Int64[],
-		delay_pos     = Float64[],
-		delay         = Float64[],
-		pulse         = Int64[],
-		freq          = Float64[],
-		causal        = Bool[],
-		protocol      = String[],
-		weight        = Float64[],
-		outcome       = String[],
-		paper         = String[],
-		temp          = Float64[],
-		injection     = Float64[],
-		exca          = Float64[],
-		exmg          = Float64[],
-		repeat_times  = Int64[],
-		repeat_after  = Float64[],
-		testing_freq  = Float64[],
-		inj_time      = Float64[],
-		age           = Float64[],
-		AP_by_EPSP    = String[],
-		GABA_block	  = String[],
-		jitter		  = Float64[],
-		sparse	 	  = Float64[],
-		dista		  = Float64[],
-		pre_poisson_rate = Float64[],
-		post_poisson_rate = Float64[])
+			n_pre         = Int64[],
+			delay_pre     = Float64[],
+			n_pos         = Int64[],
+			delay_pos     = Float64[],
+			delay         = Float64[],
+			pulse         = Int64[],
+			freq          = Float64[],
+			causal        = Bool[],
+			protocol      = String[],
+			weight        = Float64[],
+			outcome       = String[],
+			paper         = String[],
+			temp          = Float64[],
+			injection     = Float64[],
+			exca          = Float64[],
+			exmg          = Float64[],
+			repeat_times  = Int64[],
+			repeat_after  = Float64[],
+			testing_freq  = Float64[],
+			inj_time      = Float64[],
+			age           = Float64[],
+			AP_by_EPSP    = String[],
+			GABA_block	  = String[],
+			jitter		  = Float64[],
+			sparse	 	  = Float64[],
+			dista		  = Float64[],
+			pre_poisson_rate = Float64[],
+			post_poisson_rate = Float64[]
+			)
 
 		########## not shown in the paper
 		if paper == "oconnor"
@@ -843,22 +948,22 @@ end
 function paired_representation(start_time,n_pre,delay_pre,n_pos,delay_pos,delay,freq,repetion,causal,repeat_times,repeat_after)
 	post_pulses = Float64[]
 	pre_pulses = Float64[]
-	step=1.0/((freq)*0.001)
-  for i in collect(start_time:step:(start_time+step*(repetion-1)))
-	append!(pre_pulses,ifelse(causal==true,0,delay) .+ i .+ range(0., length=n_pre, stop=delay_pre*ifelse(n_pre>1,n_pre-1,n_pre)))
-	append!(post_pulses,ifelse(causal==false,0,delay) .+ i .+ range(0., length=n_pos, stop=delay_pos*ifelse(n_pos>1,n_pos-1,n_pos)))
-  end
-  if repeat_times>0 && repetion>0
-		  	pre_pulses_aux = pre_pulses .-start_time
-			for i in 2:repeat_times
-		  		append!(pre_pulses,pre_pulses_aux .+ repeat_after .+ pre_pulses[end])
-			end
-			post_pulses_aux = post_pulses .-start_time
-			for i in 2:repeat_times
-				append!(post_pulses,post_pulses_aux .+ repeat_after .+ post_pulses[end])
-			end
-  end
-  return pre_pulses, post_pulses
+	step = 1 / ((freq) * 0.001)
+	for i in collect(start_time:step:(start_time+step*(repetion-1)))
+		append!(pre_pulses,ifelse(causal==true,0,delay) .+ i .+ range(0., length=n_pre, stop=delay_pre*ifelse(n_pre>1,n_pre-1,n_pre)))
+		append!(post_pulses,ifelse(causal==false,0,delay) .+ i .+ range(0., length=n_pos, stop=delay_pos*ifelse(n_pos>1,n_pos-1,n_pos)))
+	end
+	if repeat_times>0 && repetion>0
+		pre_pulses_aux = pre_pulses .-start_time
+		for i in 2:repeat_times
+			append!(pre_pulses,pre_pulses_aux .+ repeat_after .+ pre_pulses[end])
+		end
+		post_pulses_aux = post_pulses .-start_time
+		for i in 2:repeat_times
+			append!(post_pulses,post_pulses_aux .+ repeat_after .+ post_pulses[end])
+		end
+	end
+	return pre_pulses, post_pulses
 end
 
 """
@@ -1061,7 +1166,7 @@ function initial_conditions_continuous_temp(param_synapse)
 		1.0
 		1.0])
 	end
-	if 25 < temp_rates <= 30.
+	if 25 < temp_rates <= 30
 		return vec([
 		-70.0140727673961
 		-70.00177103943689
@@ -1142,44 +1247,44 @@ end
 function initial_conditions_continuous_steady_dye(param_synapse)
 	@unpack_SynapseParams param_synapse
   return vec([
-  -70.79429490923671
-  -70.79411507925752
-  -70.79373452702642
-    1.0
-    1.8937985515700873
-    0.06544565489559395
-   -9.353645289760924e-24
-   27.668652955744996
-    0.018289183656159797
-    0.0012380953924366839
-    6.019820446572491e-7
-   19.97204506487
-    0.027955066618653265
-   63.581926032844144
-    1.153523449658415
-    0.003960046076090567
-    0.16522683320931195
-    0.0005534077298222614
-    0.8323722641818724
-    0.12411271177445717
-    0.003138175023134278
-    0.00047491361819079867
-    1.6179504762996062
-    0.24615855264482245
-    0.0062839007098402155
-    0.000982621969867967
-    1.953017871747061
-    0.30134128704713425
-    0.0077134827679826694
-    0.0012279303271366144
-    0.0
-    0.0
-    0.0
-    1.3854633395928156e-26
-    3.243117778864661e-6
-    0.9999826149121529
-    0.0008260666028628115
-    0.0002458563962436573
+	-70.79429490923671
+	-70.79411507925752
+	-70.79373452702642
+		1.0
+		1.8937985515700873
+		0.06544565489559395
+	-9.353645289760924e-24
+	27.668652955744996
+		0.018289183656159797
+		0.0012380953924366839
+		6.019820446572491e-7
+	19.97204506487
+		0.027955066618653265
+	63.581926032844144
+		1.153523449658415
+		0.003960046076090567
+		0.16522683320931195
+		0.0005534077298222614
+		0.8323722641818724
+		0.12411271177445717
+		0.003138175023134278
+		0.00047491361819079867
+		1.6179504762996062
+		0.24615855264482245
+		0.0062839007098402155
+		0.000982621969867967
+		1.953017871747061
+		0.30134128704713425
+		0.0077134827679826694
+		0.0012279303271366144
+		0.0
+		0.0
+		0.0
+		1.3854633395928156e-26
+		3.243117778864661e-6
+		0.9999826149121529
+		0.0008260666028628115
+		0.0002458563962436573
 	])
 end
 
