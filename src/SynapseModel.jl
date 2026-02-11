@@ -488,7 +488,7 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 
 			# simulate the event with Glutamate ON
 			# variability here
-			res = SimGluON(res.xc[:,end], res.xd[:,end], eve, eve + p_synapse.glu_width,  ifelse(is_glu_released[eveindex], gluamp, zero(T)))
+			res = SimGluON(res.xc[:, end], res.xd[:, end], eve, eve + p_synapse.glu_width, ifelse(is_glu_released[eveindex], gluamp, zero(T)))
 			append!(XC,res.xc);  append!(XD,res.xd);  append!(tt,res.time)
 		end
 		# update the progress bar
@@ -505,35 +505,37 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 	# update the progress bar
 	progress && next!(pbar; showvalues = [(:steps, length(events_sorted_times) + 1), (:t, p_synapse.t_end)])
 
-	@assert res.time[end] == p_synapse.t_end "Error in PDMP. Did not reach requested simulated time","complete simulated time"
+	if res.time[end] != p_synapse.t_end 
+		error("Error in PDMP. Did not reach requested simulated time","complete simulated time")
+	end
 
 	return (t = tt, XC = XC, XD = XD)
 end
 
+const VARIABLE_NAMES_CONTINUOUS = (
+    :Vsp, :Vdend, :Vsoma, :λ, :ImbufCa, :Ca, :Dye,
+    :CaM0, :CaM2C, :CaM2N, :CaM4,
+    :mCaN, :CaN4, :mKCaM,
+    :KCaM0, :KCaM2N, :KCaM2C, :KCaM4,
+    :PCaM0, :PCaM2C, :PCaM2N, :PCaM4,
+    :P, :P2, :LTD, :LTP, :act_D, :act_P,
+    :m, :h, :n, :SK, :λ_age, :λ_aux
+)
+
+const VARIABLE_INDEX = Dict(
+    name => i for (i, name) in pairs(VARIABLE_NAMES_CONTINUOUS)
+)
+
 function formatSynapseResult(tt, XC, XD)
-	namesC = (:Vsp, :Vdend, :Vsoma, :λ, :ImbufCa, :Ca, :Dye,
-				 :CaM0, :CaM2C, :CaM2N, :CaM4,
-				 :mCaN, :CaN4, :mKCaM,
-				 :KCaM0, :KCaM2N, :KCaM2C, :KCaM4,
-				 :PCaM0, :PCaM2C, :PCaM2N, :PCaM4,
-				 :P, :P2, :LTD, :LTP, :act_D, :act_P,
-				 :m, :h, :n, :SK ,:λ_age, :λ_aux)
-	values = (XC[i, :] for i in 1:length(namesC))
-	return (t = tt, XD = XD, XC = XC, zip(namesC, values)...)
+	values = (view(XC, i, :) for i in 1:length(VARIABLE_NAMES_CONTINUOUS))
+	return (t = tt, XD = XD, XC = XC, zip(VARIABLE_NAMES_CONTINUOUS, values)...)
 end
 
-function indexOfVariable(name::Symbol)
-	names = (:Vsp, :Vdend, :Vsoma, :λ, :ImbufCa, :Ca, :Dye,
-				 :CaM0, :CaM2C, :CaM2N, :CaM4,
-				 :mCaN, :CaN4, :mKCaM,
-				 :KCaM0, :KCaM2N, :KCaM2C, :KCaM4,
-				 :PCaM0, :PCaM2C, :PCaM2N, :PCaM4,
-				 :P, :P2, :LTD, :LTP, :act_D, :act_P,
-				 :m, :h, :n, :SK ,:λ_age, :λ_aux)
-	return findfirst(isequal(name), names)
+@inline function indexOfVariable(name::Symbol)
+    return get(VARIABLE_INDEX, name, nothing)
 end
 
-function getCaM(t, XC, XD)
+@views function getCaM(t, XC, XD)
 	XC[indexOfVariable(:CaM2C), :] .+
 	XC[indexOfVariable(:CaM2N), :] .+
 	XC[indexOfVariable(:CaM4), :]
@@ -541,7 +543,7 @@ end
 
 getCaN(t, XC, XD) = XC[indexOfVariable(:CaN4), :]
 
-function getCamKII(t, XC, XD)
+@views function getCamKII(t, XC, XD)
 	return XC[indexOfVariable(:KCaM0), :]   .+
 			XC[indexOfVariable(:KCaM2C), :] .+
 			XC[indexOfVariable(:KCaM2N), :] .+
