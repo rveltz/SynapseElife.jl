@@ -144,15 +144,15 @@ function stp_evolve_synapse(t_end,
 		append!(XC, res.xc); append!(XD, res.xd); append!(tt, res.time)
 
 		# we perform a deterministic jump
-		res.xc[1,end] += res.xc[2,end] # Ca_pre -> Ca_pre + Ca_jump
-		res.xc[3,end] += 1. 		   # V_evoke -> V_evoke + 1
+		res.xc.u[end][1] += res.xc[2, end] # Ca_pre -> Ca_pre + Ca_jump
+		res.xc.u[end][3] += 1	 		   # V_evoke -> V_evoke + 1
 
 		if rand() < releaseProbaSTP(res.xc[1,end], par_pre.s, par_pre.h)
 			# we may have a  Glutamate release
 			if res.xd[2, end] > 0
 				# we have a docked vesicule
 				# we have a Glutamate release
-				res.xd[2, end] -= 1
+				res.xd.u[end][2] -= 1
 				# we save the Glu release time
 				push!(release_time, event)
 			end
