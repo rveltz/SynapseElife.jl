@@ -55,7 +55,7 @@ Postsynaptic parameters.
 ---
 
 # Units
-- time: ms
+- time: ms (millisecond)
 - length: µm (area µm^2, volume µm^3)
 - voltage: mV
 - current: pA
