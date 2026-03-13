@@ -20,6 +20,7 @@ RecursiveArrayTools = "731186ca-8d62-57ce-b412-fbd966d074cd"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
 
 [compat]
 Catalyst = "^10.4.2,11,12,13,14,15"
