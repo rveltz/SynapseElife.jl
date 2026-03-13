@@ -139,20 +139,20 @@ function stp_evolve_synapse(t_end,
 
 	for (countloop, event) in enumerate(prespike)
 		################### Glutamate  ###################
-		res = stpPDMP(res.xc[:,end], res.xd[:,end], par_pre, nu, tt[end], event; kwargs...)
+		res = stpPDMP(res.xc[:, end], res.xd[:, end], par_pre, nu, tt[end], event; kwargs...)
 
 		append!(XC, res.xc); append!(XD, res.xd); append!(tt, res.time)
 
 		# we perform a deterministic jump
-		res.xc[1,end] += res.xc[2,end] # Ca_pre -> Ca_pre + Ca_jump
-		res.xc[3,end] += 1. 		   # V_evoke -> V_evoke + 1
+		res.xc.u[end][1] += res.xc[2, end] # Ca_pre -> Ca_pre + Ca_jump
+		res.xc.u[end][3] += 1	 		   # V_evoke -> V_evoke + 1
 
 		if rand() < releaseProbaSTP(res.xc[1,end], par_pre.s, par_pre.h)
 			# we may have a  Glutamate release
 			if res.xd[2, end] > 0
 				# we have a docked vesicule
 				# we have a Glutamate release
-				res.xd[2, end] -= 1
+				res.xd.u[end][2] -= 1
 				# we save the Glu release time
 				push!(release_time, event)
 			end
@@ -206,11 +206,11 @@ function stp(t_end, param,
 			kwargs...)
 	# presynaptic spikes
 	_prespike = all_events_times[is_pre_or_post_index .== true ]
-	prespike = _prespike[_prespike.<t_end]
+	prespike = _prespike[_prespike .< t_end]
 
 	tt, XC, XD, glu_release_times, bap_by_epsp_times = stp_evolve_synapse(
 				t_end,
-				[0., 1. , 0.],
+				[0., 1 , 0],
 				[0, param.D_0, param.R_0],
 				param,
 				prespike,

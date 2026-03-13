@@ -2,17 +2,17 @@ using Revise, SynapseElife,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
-	ColorSchemes, Parameters, Sundials
+	ColorSchemes, Sundials
 
 ############# Initials ##################################################
 data_protocol = dataProtocol("TigaretMellor16")
 
 colorss = ColorSchemes.coolwarm
-	# pyplot()
-	l = @layout [a{.5w} b{.5w}]
-	Plots.plot(windowsize=(0.9*1100*2/3,0.9*250),layout=l,grid=false)
-	plot!(w=0,SynapseParams().LTP_region,color="red",alpha=.1)
-	plot!(w=0,SynapseParams().LTD_region,color="blue",alpha=.1); plot!(grid=false)
+# pyplot()
+l = @layout [a{.5w} b{.5w}]
+Plots.plot(windowsize=(0.9*1100*2/3,0.9*250),layout=l,grid=false)
+plot!(w=0,SynapseParams().LTP_region,color="red",alpha=.1)
+plot!(w=0,SynapseParams().LTD_region,color="blue",alpha=.1); plot!(grid=false)
 
 for k in 2:8
 	pls = data_protocol[!,:pulse][k]
@@ -56,7 +56,7 @@ for k in 2:8
 		@info data_protocol[k,:protocol]
 		@show "number of releases $(sum(is_glu_release))"
 
-		ode = :lsoda
+		# ode = :lsoda
 		ode = CVODE_BDF(linear_solver=:GMRES)
 
 		result = @time evolveSynapse(

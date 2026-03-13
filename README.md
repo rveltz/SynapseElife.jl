@@ -8,7 +8,7 @@
 This is the main repository for the Synapse simulation package written in Julia language. The associated publication is on [BiorXiv](https://www.biorxiv.org/content/10.1101/2021.03.30.437703v1).
 
 [docs-dev-img]: https://img.shields.io/badge/docs-dev-purple.svg
-[docs-dev-url]: https://rveltz.github.io/SynapseElife/dev/
+[docs-dev-url]: https://rveltz.github.io/SynapseElife.jl/dev/
 
 ### Authors
 

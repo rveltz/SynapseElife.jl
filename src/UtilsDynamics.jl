@@ -20,7 +20,7 @@ $(SIGNATURES)
 
 Compute the current from the BAPs. It is a smooth version of a sum of dirac with fixed amplitude `amp`.
 """
-function inputBaP(t, bapTimes::Vector, duration, amp::T) where T
+function inputBaP(t, bapTimes::AbstractVector, duration, amp::T) where T
 	if isempty(bapTimes); return zero(T); end
 	res = zero(T)
 	Δ = duration / 2

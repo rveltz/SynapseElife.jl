@@ -4,15 +4,15 @@ function F_synapse(xdot, pop_c, discrete_var, p_synapse::SynapseParams, t, event
 
 	@unpack_SynapseParams p_synapse
 	Vsp, Vdend,	Vsoma,
-	λ, ImbufCa,
-	Ca,	Dye,
-	CaM0, CaM2C, CaM2N, CaM4,
-	mCaN, CaN4,
-	mKCaM, KCaM0, KCaM2N, KCaM2C, KCaM4,
-	PCaM0, PCaM2C, PCaM2N, PCaM4,
-	P, P2,
-	LTD, LTP, act_D, act_P,
-	m, h, n, SK, λ_age, λ_aux = pop_c
+			λ, ImbufCa,
+			Ca,	Dye,
+			CaM0, CaM2C, CaM2N, CaM4,
+			mCaN, CaN4,
+			mKCaM, KCaM0, KCaM2N, KCaM2C, KCaM4,
+			PCaM0, PCaM2C, PCaM2N, PCaM4,
+			P, P2,
+			LTD, LTP, act_D, act_P,
+			m, h, n, SK, λ_age, λ_aux = pop_c
 
 	##### Stochastic channels/receptors
 	n1_ampa	     = discrete_var[14]									#ampa subconductance 1
@@ -51,7 +51,7 @@ function F_synapse(xdot, pop_c, discrete_var, p_synapse::SynapseParams, t, event
 
 	##### K channel
 	n_inf = 1 / (1 + alpha_n(Vsoma) )
-	n_tau = max(50 * beta_n(Vsoma) / (1 + alpha_n(Vsoma)), 2.)
+	n_tau = max(50 * beta_n(Vsoma) / (1 + alpha_n(Vsoma)), 2)
 	∂n	         = (n_inf - n) / n_tau
 	I_K		     = gamma_K * n * (Erev_K - Vsoma)
 
@@ -63,7 +63,7 @@ function F_synapse(xdot, pop_c, discrete_var, p_synapse::SynapseParams, t, event
 	Iampa	     = (Erev_ampa - Vsp) * (gamma_ampa1 * n1_ampa + gamma_ampa2 * n2_ampa + gamma_ampa3 * n3_ampa) # current ampa
 
 	##### GABA
-	Igaba        = (n_gaba1 + n_gaba2) *  (Erev_Cl - Vdend)  * gamma_GABA
+	Igaba        = (n_gaba1 + n_gaba2) * (Erev_Cl - Vdend) * gamma_GABA
 
 	##### Calcium sources (VGCCs currents, and NMDA calcium contribution)
 	ΦCa   = perm * ghk(Vsp, Ca, Ca_ext, p_synapse) #GHK factor
@@ -366,7 +366,7 @@ function pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu
 		(rate, xc, xd, p, t, sum_rate) -> R_synapse(rate, xc, xd, p, t, sum_rate, glu),
 		nu, xc, xd, p_synapse, (t1, t2);
 		Ncache = 12) # this option is for AD in PreallocationTools
-	return solve(problem, algo ;kwargs...)
+	return solve(problem, algo; kwargs...)
 end
 
 """
@@ -423,25 +423,18 @@ end
 """
 Same as `evolveSynapse` but do not format the output because it takes time.
 """
-function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
-		events_sorted_times,
-		is_pre_or_post_event,
-		bap_by_epsp,
-		is_glu_released,
-		algos;
-		verbose = false, progress = false,
-		abstol = 1e-8, reltol = 1e-7, save_positions = (false, true),
-		nu = buildTransitionMatrix(), kwargs...) where T
+function evolveSynapse_noformat(xc0::Vector{𝒯}, xd0, p_synapse::SynapseParams,
+								events_sorted_times,
+								is_pre_or_post_event,
+								bap_by_epsp,
+								is_glu_released,
+								algos;
+								verbose = false, progress = false,
+								abstol = 1e-8, reltol = 1e-7, 
+								save_positions::Tuple{Bool, Bool} = (false, true),
+								nu = buildTransitionMatrix(), kwargs...) where 𝒯
 
-	if save_positions isa Tuple{Bool, Bool}
-		save_positionsON = save_positions
-		save_positionsOFF = save_positions
-		# save_positionsLAST = save_positions
-	else
-		save_positionsON = save_positions[1]
-		save_positionsOFF = save_positions[2]
-		# save_positionsLAST = save_positions
-	end
+	save_positionsON = save_positionsOFF = save_positions
 
 	@assert eltype(is_pre_or_post_event) == Bool "Provide booleans for glutamate releases."
 	@assert eltype(is_glu_released) == Bool "Provide booleans for glutamate indices."
@@ -451,44 +444,44 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 
 	XC = VectorOfArray([xc0]) # vector to hold continuous variables
 	XD = VectorOfArray([xd0]) # vector to hold discrete variables
-	tt = [0.0]				  # vector of times
+	tt = [zero(𝒯)]			   # vector of times
 
 	# results from the simulation of an external event
-	res = PDMP.PDMPResult([0., 0.], copy(XC), copy(XD))
+	res = PDMP.PDMPResult([zero(𝒯), zero(𝒯)], copy(XC), copy(XD))
 
 	# we collect which external events correspond to BaPs
 	events_bap = events_sorted_times[is_pre_or_post_event .== false]
 
 	# function to simulate the synapse when Glutamate is ON
-	SimGluON = (xc, xd, t1, t2, glu) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu; algo = algos[1], save_positions = save_positionsON, reltol = reltol, abstol = abstol, kwargs...)
+	SimGluON = (xc, xd, t1, t2, glu) -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu; algo = algos[1], save_positions = save_positionsON, reltol, abstol, kwargs...)
 
 	# function to simulate the synapse when Glutamate is OFF
-	SimGluOFF = (xc, xd, t1, t2)	 -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, zero(T), p_synapse, nu;  algo = algos[2], save_positions = save_positionsOFF, reltol = reltol, abstol = abstol, kwargs...)
+	SimGluOFF = (xc, xd, t1, t2)	 -> pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, zero(𝒯), p_synapse, nu;  algo = algos[2], save_positions = save_positionsOFF, reltol, abstol, kwargs...)
 
 	# variable to display progressbar during simulation
 	# +1 for the last big till p_synapse.t_end
-	pbar = progress ? Progress(length(events_sorted_times) + 1, 1) : nothing
+	pbar = progress ? Progress(length(events_sorted_times) + 1, dt = 1) : nothing
 
 	# random variable for Glutamate concentration
 	gluDist = Gamma(1/p_synapse.glu_cv^2, p_synapse.glu_cv^2)
 
 	# we loop over the external events, simulate them and append to res
 	for (eveindex, eve) in enumerate(events_sorted_times)
-		verbose && printstyled(color=:red,"\n$(eveindex) / $(length(events_sorted_times)) +++++++++++++++++++++++\n")
+		verbose && printstyled(color = :red,"\n$(eveindex) / $(length(events_sorted_times)) +++++++++++++++++++++++\n")
 		if is_pre_or_post_event[eveindex] == true # it is a pre-synaptic event
 			# we simulate the synapse with Glutamate OFF until event time
 			# then we put  Glutamate ON for dt = p_synapse.glu_width with variable amplitude (concentration)
 			verbose && @printf("=> Glu Off,%4d, t ∈ [%9.4e, %9.4e]\n", eveindex, tt[end], eve)
 
 			# simulate the event with Glutamate OFF
-			res = SimGluOFF(res.xc[:,end], res.xd[:,end], tt[end], eve)
+			res = SimGluOFF(res.xc[:, end], res.xd[:, end], tt[end], eve)
 			append!(XC, res.xc);  append!(XD, res.xd);  append!(tt, res.time)
 			gluamp = rand(gluDist)
 			verbose && @printf("=> Glu on, %4d, t ∈ [%9.4e, %9.4e]\n", eveindex, eve, eve+ p_synapse.glu_width )
 
 			# simulate the event with Glutamate ON
 			# variability here
-			res = SimGluON(res.xc[:,end], res.xd[:,end], eve, eve + p_synapse.glu_width,  ifelse(is_glu_released[eveindex], gluamp, zero(T)))
+			res = SimGluON(res.xc[:, end], res.xd[:, end], eve, eve + p_synapse.glu_width, ifelse(is_glu_released[eveindex], gluamp, zero(𝒯)))
 			append!(XC,res.xc);  append!(XD,res.xd);  append!(tt,res.time)
 		end
 		# update the progress bar
@@ -498,42 +491,44 @@ function evolveSynapse_noformat(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 	# reaching tend: we simulate the synapse with Glutamate OFF until simulation end time required
 	# by the user. In  most protocol, this is taking most of the time.
 	verbose && @printf("=> Reaching the end, t ∈ [%9.4e, %9.4e]\n",tt[end], p_synapse.t_end)
-	res = @time SimGluOFF(res.xc[:,end], res.xd[:,end], tt[end], p_synapse.t_end)
-	@info "last bit" length(res.time) tt[end] p_synapse.t_end
+	res = @time SimGluOFF(res.xc[:, end], res.xd[:,end], tt[end], p_synapse.t_end)
+	@debug "last bit" length(res.time) tt[end] p_synapse.t_end
 	append!(XC, res.xc);  append!(XD, res.xd);  append!(tt, res.time)
 
 	# update the progress bar
 	progress && next!(pbar; showvalues = [(:steps, length(events_sorted_times) + 1), (:t, p_synapse.t_end)])
 
-	@assert res.time[end] == p_synapse.t_end "Error in PDMP. Did not reach requested simulated time","complete simulated time"
+	if res.time[end] != p_synapse.t_end 
+		error("Error in PDMP. Did not reach requested simulated time","complete simulated time")
+	end
 
 	return (t = tt, XC = XC, XD = XD)
 end
 
+const VARIABLE_NAMES_CONTINUOUS = (
+    :Vsp, :Vdend, :Vsoma, :λ, :ImbufCa, :Ca, :Dye,
+    :CaM0, :CaM2C, :CaM2N, :CaM4,
+    :mCaN, :CaN4, :mKCaM,
+    :KCaM0, :KCaM2N, :KCaM2C, :KCaM4,
+    :PCaM0, :PCaM2C, :PCaM2N, :PCaM4,
+    :P, :P2, :LTD, :LTP, :act_D, :act_P,
+    :m, :h, :n, :SK, :λ_age, :λ_aux
+)
+
+const VARIABLE_INDEX = Dict(
+    name => i for (i, name) in pairs(VARIABLE_NAMES_CONTINUOUS)
+)
+
 function formatSynapseResult(tt, XC, XD)
-	namesC = (:Vsp, :Vdend, :Vsoma, :λ, :ImbufCa, :Ca, :Dye,
-				 :CaM0, :CaM2C, :CaM2N, :CaM4,
-				 :mCaN, :CaN4, :mKCaM,
-				 :KCaM0, :KCaM2N, :KCaM2C, :KCaM4,
-				 :PCaM0, :PCaM2C, :PCaM2N, :PCaM4,
-				 :P, :P2, :LTD, :LTP, :act_D, :act_P,
-				 :m, :h, :n, :SK ,:λ_age, :λ_aux)
-	values = (XC[i, :] for i in 1:length(namesC))
-	return (t = tt, XD = XD, XC = XC, zip(namesC, values)...)
+	values = (view(XC, i, :) for i in 1:length(VARIABLE_NAMES_CONTINUOUS))
+	return (t = tt, XD = XD, XC = XC, zip(VARIABLE_NAMES_CONTINUOUS, values)...)
 end
 
-function indexOfVariable(name::Symbol)
-	names = (:Vsp, :Vdend, :Vsoma, :λ, :ImbufCa, :Ca, :Dye,
-				 :CaM0, :CaM2C, :CaM2N, :CaM4,
-				 :mCaN, :CaN4, :mKCaM,
-				 :KCaM0, :KCaM2N, :KCaM2C, :KCaM4,
-				 :PCaM0, :PCaM2C, :PCaM2N, :PCaM4,
-				 :P, :P2, :LTD, :LTP, :act_D, :act_P,
-				 :m, :h, :n, :SK ,:λ_age, :λ_aux)
-	return findfirst(isequal(name), names)
+@inline function indexOfVariable(name::Symbol)
+    return get(VARIABLE_INDEX, name, nothing)
 end
 
-function getCaM(t, XC, XD)
+@views function getCaM(t, XC, XD)
 	XC[indexOfVariable(:CaM2C), :] .+
 	XC[indexOfVariable(:CaM2N), :] .+
 	XC[indexOfVariable(:CaM4), :]
@@ -541,7 +536,7 @@ end
 
 getCaN(t, XC, XD) = XC[indexOfVariable(:CaN4), :]
 
-function getCamKII(t, XC, XD)
+@views function getCamKII(t, XC, XD)
 	return XC[indexOfVariable(:KCaM0), :]   .+
 			XC[indexOfVariable(:KCaM2C), :] .+
 			XC[indexOfVariable(:KCaM2N), :] .+

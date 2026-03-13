@@ -2,7 +2,7 @@ using Revise, SynapseElife,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
-	ColorSchemes, Parameters, Sundials
+	ColorSchemes, Sundials
 
 ############# Initials ##################################################
 

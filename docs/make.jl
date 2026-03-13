@@ -1,4 +1,6 @@
 using Documenter, SynapseElife
+using Pkg
+# pkg"dev Plots"
 
 ENV["JULIA_DEBUG"]=Documenter
 
@@ -14,6 +16,6 @@ makedocs(doctest = false,
 	)
 	
 deploydocs(
-	repo = "github.com/rveltz/SynapseElife.git",
+	repo = "github.com/rveltz/SynapseElife.jl.git",
 	devbranch = "main"
 )
