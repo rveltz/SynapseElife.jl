@@ -27,6 +27,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 LazySets = "b4f0291d-fe17-52bc-9479-3d1a343d9043"
+LSODA = "7f56f5a3-f504-529b-bc02-0b1fe5e64312"  # <-- Added for testing
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [extensions]
