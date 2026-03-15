@@ -22,12 +22,10 @@ SciMLBase = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
-Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [weakdeps]
 LSODA = "7f56f5a3-f504-529b-bc02-0b1fe5e64312"
-Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
 
 [extensions]
 PlotsExt = ["Plots"]
@@ -37,7 +35,6 @@ Catalyst = "^10.4.2,11,12,13,14,15"
 Distributions = "0.25"
 LabelledArrays = "1.14"
 PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7, ^0.0.8, ^0.0.9, ^0.0.10, ^0.0.11"
-Sundials = "5.1.0"
 julia = "^1.10"
 
 [extras]
@@ -45,4 +42,4 @@ Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "Sundials", "LSODA"]
+test = ["Test", "LSODA"]
