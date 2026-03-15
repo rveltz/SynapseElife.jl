@@ -1,13 +1,14 @@
 module SynapseElife
-	using Parameters, Distributions, SparseArrays, DataFrames, ProgressMeter
+	# !! using LinearAlgebra, SparseArrays
+	using Parameters, Distributions, DataFrames, ProgressMeter
 
 	using DocStringExtensions
 
 	using Catalyst
-	using Printf
+	# !! using Printf
 	using LazySets # for using ∈ plasticity region
 	using StaticArrays # for using LazySets in efficient way
-	using PiecewiseDeterministicMarkovProcesses, LinearAlgebra, RecursiveArrayTools
+	using PiecewiseDeterministicMarkovProcesses, RecursiveArrayTools
 	const PDMP = PiecewiseDeterministicMarkovProcesses
 
 	include("ParamsSynapse.jl")

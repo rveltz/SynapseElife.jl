@@ -1,7 +1,7 @@
 # using Revise, Plots
 using Test
 using SynapseElife
-using PiecewiseDeterministicMarkovProcesses, Sundials
+using PiecewiseDeterministicMarkovProcesses  # !! , Sundials
 
 # this holds the spine parameters
 param_synapse = SynapseParams(t_end = 1000.)

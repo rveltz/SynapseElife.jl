@@ -415,7 +415,7 @@ function evolveSynapse(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 
 		# format the output to make it convenient to parse
 		# this is wasting a lot of ressources but is convenient for plotting
-		verbose && @printf("=> done! parsing results")
+		# !! verbose && @printf("=> done! parsing results")
 		out = formatSynapseResult(tt, XC, XD)
 end
 
@@ -471,13 +471,13 @@ function evolveSynapse_noformat(xc0::Vector{𝒯}, xd0, p_synapse::SynapseParams
 		if is_pre_or_post_event[eveindex] == true # it is a pre-synaptic event
 			# we simulate the synapse with Glutamate OFF until event time
 			# then we put  Glutamate ON for dt = p_synapse.glu_width with variable amplitude (concentration)
-			verbose && @printf("=> Glu Off,%4d, t ∈ [%9.4e, %9.4e]\n", eveindex, tt[end], eve)
+			# !! verbose && @printf("=> Glu Off,%4d, t ∈ [%9.4e, %9.4e]\n", eveindex, tt[end], eve)
 
 			# simulate the event with Glutamate OFF
 			res = SimGluOFF(res.xc[:, end], res.xd[:, end], tt[end], eve)
 			append!(XC, res.xc);  append!(XD, res.xd);  append!(tt, res.time)
 			gluamp = rand(gluDist)
-			verbose && @printf("=> Glu on, %4d, t ∈ [%9.4e, %9.4e]\n", eveindex, eve, eve+ p_synapse.glu_width )
+			# !! verbose && @printf("=> Glu on, %4d, t ∈ [%9.4e, %9.4e]\n", eveindex, eve, eve+ p_synapse.glu_width )
 
 			# simulate the event with Glutamate ON
 			# variability here
@@ -490,7 +490,7 @@ function evolveSynapse_noformat(xc0::Vector{𝒯}, xd0, p_synapse::SynapseParams
 
 	# reaching tend: we simulate the synapse with Glutamate OFF until simulation end time required
 	# by the user. In  most protocol, this is taking most of the time.
-	verbose && @printf("=> Reaching the end, t ∈ [%9.4e, %9.4e]\n",tt[end], p_synapse.t_end)
+	# !! verbose && @printf("=> Reaching the end, t ∈ [%9.4e, %9.4e]\n",tt[end], p_synapse.t_end)
 	res = @time SimGluOFF(res.xc[:, end], res.xd[:,end], tt[end], p_synapse.t_end)
 	@debug "last bit" length(res.time) tt[end] p_synapse.t_end
 	append!(XC, res.xc);  append!(XD, res.xd);  append!(tt, res.time)
