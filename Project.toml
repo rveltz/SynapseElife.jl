@@ -37,7 +37,7 @@ Catalyst = "^10.4.2,11,12,13,14,15"
 Distributions = "0.25"
 LabelledArrays = "1.14"
 PiecewiseDeterministicMarkovProcesses = "0.0.4, 0.0.5, ^0.0.7, ^0.0.8, ^0.0.9, ^0.0.10, ^0.0.11"
-Sundials = "4.24.0, 5.1.0"
+Sundials = "5.1.0"
 julia = "^1.10"
 
 [extras]
