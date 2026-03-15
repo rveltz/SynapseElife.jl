@@ -50,7 +50,7 @@ function extractReactionsCamKII(filename = "write-equation.txt")
   eqns = equations(osys)
   for (i, eq) in enumerate(eqns)
       # !! write(f, @sprintf("%s=%s \n", i, eq))
-      write(f, printstyled("$(i)=$(eq)\n")
+      write(f, printstyled("$(i)=$(eq)\n"))
   end
   close(f)
 end
