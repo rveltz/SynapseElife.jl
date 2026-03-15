@@ -1,5 +1,5 @@
 module SynapseElife
-	# !! using LinearAlgebra, SparseArrays
+	using LinearAlgebra, SparseArrays
 	using Parameters, Distributions, DataFrames, ProgressMeter
 
 	using DocStringExtensions
