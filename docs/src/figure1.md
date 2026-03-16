@@ -9,7 +9,8 @@ using SynapseElife,
 	Random,
 	Plots,
 	PiecewiseDeterministicMarkovProcesses,
-	ColorSchemes, Sundials
+	ColorSchemes, Sundials,
+	LinearAlgebra
 
 data_protocol = dataProtocol("TigaretMellor16")
 ```

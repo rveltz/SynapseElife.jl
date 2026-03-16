@@ -1,6 +1,6 @@
 ######### jumps matrix
 function stp_build_transition_matrix()
-	matrix_list = [Matrix{Int64}(I,1,1), STP_matrix()]
+	matrix_list = [[1 ], STP_matrix()]
 	return jump_matrix(matrix_list)
 end
 
