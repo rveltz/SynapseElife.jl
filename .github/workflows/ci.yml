@@ -53,13 +53,13 @@ jobs:
         with:
           version: '1.10'
       - run: |
-          julia --project=docs -e '
+          julia -e '
             using Pkg
             Pkg.instantiate()'
       - run: |
-          # julia --project=docs -e '
+          # julia -e '
           #   doctest(Synapse)' # change MYPACKAGE to the name of your package
-      - run: julia --project=docs docs/make.jl
+      - run: julia docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
