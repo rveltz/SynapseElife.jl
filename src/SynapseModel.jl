@@ -1,4 +1,4 @@
-# !! using LinearAlgebra
+using LinearAlgebra
 
 # New synapse model (cian, started 23/03/2018) that replaces NMDA model with fully state-based one from Jahr and Stevens, plus three types of VGCCs (R-type, T-type and L-type), from Magee and Johhston (1995).
 function F_synapse(xdot, pop_c, discrete_var, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
@@ -348,8 +348,8 @@ function buildTransitionMatrix()
 	matrix_list = [AMPA_matrix()]
 	push!(matrix_list, NMDA_matrix()) #for GluN2A
 	# !! push!(matrix_list, Matrix{Int64}(I, 1, 1)) #Print from Poisson Rate
-	# !! push!(matrix_list, Matrix{Int64}(1I, 1, 1)) #Print from Poisson Rate
-	push!(matrix_list, [1 ]) #Print from Poisson Rate
+	push!(matrix_list, Matrix{Int64}(1I, 1, 1)) #Print from Poisson Rate
+	# !! push!(matrix_list, [1 ]) #Print from Poisson Rate
 	push!(matrix_list, R_channel_matrix())
 	push!(matrix_list, T_channel_matrix())
 	push!(matrix_list, L_channel_matrix())
