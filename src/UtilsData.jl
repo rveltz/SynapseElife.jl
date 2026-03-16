@@ -960,15 +960,29 @@ function paired_representation(start_time,n_pre,delay_pre,n_pos,delay_pos,delay,
 		append!(post_pulses,ifelse(causal==false,0,delay) .+ i .+ range(0., length=n_pos, stop=delay_pos*ifelse(n_pos>1,n_pos-1,n_pos)))
 	end
 	if repeat_times>0 && repetion>0
-		pre_pulses_aux = pre_pulses .-start_time
+		if !isempty(pre_pulses)
+            pre_pulses_aux = pre_pulses .- start_time
+            for i in 2:repeat_times
+                append!(pre_pulses, pre_pulses_aux .+ repeat_after .+ pre_pulses[end])
+            end
+        end
+        if !isempty(post_pulses)
+            post_pulses_aux = post_pulses .- start_time
+            for i in 2:repeat_times
+                append!(post_pulses, post_pulses_aux .+ repeat_after .+ post_pulses[end])
+            end
+        end
+
+		#= pre_pulses_aux = pre_pulses .-start_time
 		for i in 2:repeat_times
 			append!(pre_pulses,pre_pulses_aux .+ repeat_after .+ pre_pulses[end])
 		end
 		post_pulses_aux = post_pulses .-start_time
 		for i in 2:repeat_times
 			append!(post_pulses,post_pulses_aux .+ repeat_after .+ post_pulses[end])
-		end
-	end
+		end =#
+		
+	end 
 	return pre_pulses, post_pulses
 end
 
