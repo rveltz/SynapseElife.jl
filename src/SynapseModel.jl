@@ -349,7 +349,7 @@ function buildTransitionMatrix()
 	push!(matrix_list, NMDA_matrix()) #for GluN2A
 	# !! push!(matrix_list, Matrix{Int64}(I, 1, 1)) #Print from Poisson Rate
 	# !! push!(matrix_list, Matrix{Int64}(1I, 1, 1)) #Print from Poisson Rate
-	push!(matrix_list, [1]) #Print from Poisson Rate
+	push!(matrix_list, [1 ]) #Print from Poisson Rate
 	push!(matrix_list, R_channel_matrix())
 	push!(matrix_list, T_channel_matrix())
 	push!(matrix_list, L_channel_matrix())
