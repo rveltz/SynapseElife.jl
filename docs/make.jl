@@ -1,6 +1,3 @@
-using Pkg
-pkg"dev Documenter ColorSchemes Plots"
-
 using Documenter, SynapseElife, ColorSchemes, Plots
 
 ENV["JULIA_DEBUG"] = Documenter
