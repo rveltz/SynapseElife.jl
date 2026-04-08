@@ -742,8 +742,6 @@ function dataProtocol(paper)
 		##########  Figure 5
 		if paper == "DudekBear93-TBS"
 			for age in collect(2.5:2.5:80)
-                # one arg too many : push!(data_protocol,[1 0. 0 0.    0.     4  100.    true     "TBS_$(age)"	 -0.5 "LTD" "$paper" 34. 1e3  2.5e3 1.5 10 200. 0. 0. 5. age "yes" "no" 0. 0. 200. 0. 0.])
-				# correction : 
 				push!(data_protocol,[1 0. 0 0.    0.     4  100.    true     "TBS_$(age)"	 -0.5 "LTD" "$paper" 34. 1e3  2.5e3 1.5 10 200. 0. 5. age "yes" "no" 0. 0. 200. 0. 0.])
 			end
 		end
