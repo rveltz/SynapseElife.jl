@@ -491,7 +491,7 @@ function evolveSynapse_noformat(xc0::Vector{𝒯}, xd0, p_synapse::SynapseParams
 	# reaching tend: we simulate the synapse with Glutamate OFF until simulation end time required
 	# by the user. In  most protocol, this is taking most of the time.
 	verbose && @printf("=> Reaching the end, t ∈ [%9.4e, %9.4e]\n",tt[end], p_synapse.t_end)
-	res = @time SimGluOFF(res.xc[:, end], res.xd[:,end], tt[end], p_synapse.t_end)
+	res = SimGluOFF(res.xc[:, end], res.xd[:,end], tt[end], p_synapse.t_end)
 	@debug "last bit" length(res.time) tt[end] p_synapse.t_end
 	append!(XC, res.xc);  append!(XD, res.xd);  append!(tt, res.time)
 
