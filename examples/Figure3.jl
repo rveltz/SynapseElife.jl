@@ -1,3 +1,6 @@
+cd(@__DIR__)
+using Pkg
+pkg"activate synapse"
 using Revise, SynapseElife,
 	Random,
 	Plots,
@@ -75,8 +78,8 @@ for k in 2:8
 		tt = result.t
 		out = SynapseElife.get_names(result.XC, result.XD)
 
-		CaMKII = out[:KCaM0] .+ out[:KCaM2C] .+ out[:KCaM2N] .+ out[:KCaM4] .+ out[:PCaM0] .+ out[:PCaM2C] .+ out[:PCaM2N] .+ out[:PCaM4] .+ out[:P] .+ out[:P2]
-		CaM = out[:CaM2C] .+ out[:CaM2N] .+ out[:CaM4]
+		CaMKII = SynapseElife.getCamKII(tt, result.XC, result.XD)
+		CaM = SynapseElife.getCaM(tt, result.XC, result.XD)
 		CaN = out[:CaN4]
 
 		@info "Plotting..."
