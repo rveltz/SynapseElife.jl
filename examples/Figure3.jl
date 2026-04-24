@@ -11,6 +11,17 @@ using Revise, SynapseElife,
 data_protocol = dataProtocol("TigaretMellor16")
 
 colorss = ColorSchemes.coolwarm
+
+fig3g_colors = Dict(
+        "2Post1Pre50" => colorant"#CDD8EC",
+        "2Pre50"      => colorant"#546DD5",
+        "1Pre1Post10" => colorant"#ECD5CD",
+        "2Post1Pre20" => colorant"#EE856A",
+        "1Pre2Post50" => colorant"#D75C4F",
+        "1Pre2Post10" => colorant"#B20526",
+        "2Pre10"      => colorant"#90B0F8",
+    )
+
 # pyplot()
 l = @layout [a{.5w} b{.5w}]
 Plots.plot(windowsize=(0.9*1100*2/3,0.9*250),layout=l,grid=false)
@@ -76,16 +87,14 @@ for k in 2:8
 
 		@info "Extracting data..."
 		tt = result.t
-		out = SynapseElife.get_names(result.XC, result.XD)
 
 		CaMKII = SynapseElife.getCamKII(tt, result.XC, result.XD)
 		CaM = SynapseElife.getCaM(tt, result.XC, result.XD)
-		CaN = out[:CaN4]
+		CaN = SynapseElife.getCaN(tt, result.XC, result.XD)
+		plasticity = SynapseElife.getPlasticity(tt, result.XC, result.XD)
 
 		@info "Plotting..."
-		args = (color = get(colorss, k/8), w = 2, grid= false)
-		plot!(CaN,  CaMKII; subplot = 1, ylabel="CaMKII (μM)", xlabel="CaN (μM)", label = "", ylim=[0,32], xlim=[0,11.5], args...) |> display
-		plot!(tt/1e3, [out[:lt]][1:end][1][1:end,3]-[out[:lt]][1:end][1][1:end,2]; subplot = 2,ylabel="weight change (%)", xlabel="Time (s)", label = "$(data_protocol[k,:protocol])", ylim = [-80,90], args...) |> display
+		args = (color = fig3g_colors[data_protocol[k,:protocol]], w = 2, grid= false)
+		plot!(CaN,  CaMKII; subplot = 1, ylabel="CaMKII (μM)", xlabel="CaN (μM)", label = "", args...) |> display
+		plot!(tt/1e3, plasticity; subplot = 2,ylabel="weight change (%)", xlabel="Time (s)", label = "$(data_protocol[k,:protocol])", ylim = [-80,90], args...) |> display
 end
-
-plot!(subplot = 1,legend = :none) |> display

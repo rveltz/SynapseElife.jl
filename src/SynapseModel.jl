@@ -1,5 +1,11 @@
 # New synapse model (cian, started 23/03/2018) that replaces NMDA model with fully state-based one from Jahr and Stevens, plus three types of VGCCs (R-type, T-type and L-type), from Magee and Johhston (1995).
-function F_synapse(xdot, pop_c, discrete_var, p_synapse::SynapseParams, t, events_bap, bap_by_epsp)
+function F_synapse(xdot, 
+					pop_c, 
+					discrete_var, 
+					p_synapse::SynapseParams, 
+					t, 
+					events_bap, 
+					bap_by_epsp)
 	# vector field used for the continuous variable
 
 	@unpack_SynapseParams p_synapse
@@ -547,4 +553,8 @@ getCaN(t, XC, XD) = XC[indexOfVariable(:CaN4), :]
 			XC[indexOfVariable(:PCaM4), :]  .+
 			XC[indexOfVariable(:P), :]      .+
 			XC[indexOfVariable(:P2), :]
+end
+
+@views function getPlasticity(t, XC, XD)
+	XD[38, :] .- XD[37, :]
 end
