@@ -80,7 +80,7 @@ result = @time evolveSynapse(
 tt = result.t
 XD = result.XD
 
-colorss = ColorSchemes.viridis
+colorss = ColorSchemes.viridis;
 limits_d(x) = (minimum(x) ;maximum(x))
 
 gr()
@@ -91,7 +91,7 @@ begin
 	#AMPAr
 	lim=[(start-15*.02),(start+15*.28)]
 	val = XD[14,:] .+ XD[15,:] .+ XD[16,:]
-	plot!(tt,val,xlabel=" ",label="",ylabel="AMPAr",w=2.5,subplot=1,alpha=1,color=get(colorss, 0.) ,linetype=:steppost,layout=l,axis=false,grid=false,xlim=[start-20 ,start .+ 250],xticks=(collect(500:100:700),collect(0:100:200))
+	plot!(tt,val,xlabel="",ylabel="AMPAr",w=2.5,subplot=1,alpha=1,color=get(colorss, 0.) ,linetype=:steppost,layout=l,grid=false,xlim=[start-20 ,start .+ 250],xticks=(collect(500:100:700),collect(0:100:200))
 	,yticks=(collect(0:20:80)))
 	plot!(tt,val,xlabel="time (ms)",label="",ylabel="AMPAr",w=2.5,subplot=2,alpha=1,color=get(colorss, 0.) ,linetype=:steppost,layout=l,xlim=lim,
 	xticks=(collect(500:1:504),collect(0:1:4)),
@@ -101,7 +101,7 @@ begin
 	lim = [(start+11.2),(start+20)]
 	val = XD[28,:]
 	plot!(tt,XD[32,:],xlabel="",label="T-type",ylabel="",w=2.5,subplot=3,alpha=1,color=get(colorss, .5) ,linetype=:steppost,layout=l)
-	plot!(tt,XD[28,:],xlabel="",label="R-type",ylabel="",w=2.5,subplot=3,alpha=1,color=get(colorss, 1.) ,linetype=:steppost,layout=l,axis=false,grid=false)
+	plot!(tt,XD[28,:],xlabel="",label="R-type",ylabel="",w=2.5,subplot=3,alpha=1,color=get(colorss, 1.) ,linetype=:steppost,layout=l,grid=false)
 	plot!(tt,XD[34,:] .+ XD[35,:],xlabel="",label="L-type",ylabel="VGCC",w=2.5,subplot=3,alpha=1,color=get(colorss, .0) ,linetype=:steppost,layout=l,
 	xlim=[start-20 ,start .+ 250],xticks=(collect(500:100:700),collect(0:100:200)))
 
@@ -113,7 +113,7 @@ begin
 	#GABAr
 	lim = [(start-100*.015),(start+100*.3)]
 	val = XD[49,:] .+ XD[50,:]
-	plot!(tt,val,xlabel="",label="",ylabel="GABAr",w=2.5,subplot=5,alpha=1,color=get(colorss, 0.5) ,linetype=:steppost,layout=l,axis=false,grid=false,
+	plot!(tt,val,xlabel="",label="",ylabel="GABAr",w=2.5,subplot=5,alpha=1,color=get(colorss, 0.5) ,linetype=:steppost,layout=l,grid=false,
 	xlim=[start-20 ,start .+ 250],xticks=(collect(500:100:700),collect(0:100:200)))
 	plot!(tt,val,xlabel="time (ms)",label="",ylabel="GABAr",w=2.5,subplot=6,alpha=1,color=get(colorss, 0.5) ,linetype=:steppost,layout=l,
 	xlim=lim,
@@ -122,7 +122,7 @@ begin
 	#NMDAr
 	lim = [(start-550*.06 ),(start+550 )]
 	val = XD[22,:] .+ XD[23,:]
-	plot!(tt,val,xlabel="",label="GluN2A",ylabel="",w=2.5,subplot=7,alpha=1,color=get(colorss, 0.25) ,linetype=:steppost,layout=l,yaxis=false,grid=false,xlim=[start-20,start .+ 250])
+	plot!(tt,val,xlabel="",label="GluN2A",ylabel="",w=2.5,subplot=7,alpha=1,color=get(colorss, 0.25) ,linetype=:steppost,layout=l,grid=false,xlim=[start-20,start .+ 250])
 	plot!(tt,val,xlabel="time (ms)",label="",ylabel="NMDAr",w=2.5,subplot=8,alpha=1,color=get(colorss, 0.25) ,linetype=:steppost,layout=l,xlim=[500-5,600],
 	xticks=(collect(500:25:600),collect(0:25:100)),yticks=(collect(0:2:8)))
 	val = XD[44,:] .+ XD[45,:]
@@ -324,7 +324,7 @@ begin
 		tt = result.t
 		out = SynapseElife.get_names(result.XC, result.XD)
 
-		CaMKII  =  out[:KCaM0] .+ out[:KCaM2C] .+ out[:KCaM2N] .+ out[:KCaM4] .+ out[:PCaM0] .+ out[:PCaM2C] .+ out[:PCaM2N] .+ out[:PCaM4] .+ out[:P] .+ out[:P2]
+		CaMKII  = out[:KCaM0] .+ out[:KCaM2C] .+ out[:KCaM2N] .+ out[:KCaM4] .+ out[:PCaM0] .+ out[:PCaM2C] .+ out[:PCaM2N] .+ out[:PCaM4] .+ out[:P] .+ out[:P2]
 		CaM	 =   out[:CaM2C] .+ out[:CaM2N] .+ out[:CaM4]
 		CaN = out[:CaN4]
 

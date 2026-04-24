@@ -174,10 +174,10 @@ function F_synapse(xdot, pop_c, discrete_var, p_synapse::SynapseParams, t, event
 	xdot[32] = ∂SK
 	xdot[33] = ∂λ_age
 	xdot[34] = ∂λ_aux
+	return xdot
 end
 
-function R_synapse(rate, xc, xd, p_synapse::SynapseParams, t, sum_rate, glu = 0)
-
+function R_synapse(rate::AbstractVector{𝒯}, xc, xd, p_synapse::SynapseParams, t, sum_rate, glu = 0) where {𝒯}
 	@unpack_SynapseParams p_synapse
 
 	############### Voltage ###################
@@ -334,9 +334,9 @@ function R_synapse(rate, xc, xd, p_synapse::SynapseParams, t, sum_rate, glu = 0)
 	rate[98]  =  GABA_r_ro2 * xd[48]
 	rate[99]  =  GABA_r_c2  * xd[50]
 
-	bound = 0.
+	bound = zero(𝒯)
 	if sum_rate == false
-		return 0., bound
+		return zero(𝒯), bound
 	else
 		return sum(rate), bound
 	end

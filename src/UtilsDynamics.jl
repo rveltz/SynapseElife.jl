@@ -1,13 +1,13 @@
 # nspeedfactor = 1, speed up Kdr channel rates
-@inline alpha_n(V, nspeedfactor = 1) = nspeedfactor * exp(-0.11*(V - 13) )
-@inline beta_n(V, nspeedfactor = 1)  = nspeedfactor * exp(-0.08*(V - 13) )
+@inline alpha_n(V, nspeedfactor = 1) = nspeedfactor * exp(-0.11 * (V - 13) )
+@inline beta_n(V, nspeedfactor = 1)  = nspeedfactor * exp(-0.08 * (V - 13) )
 @inline alpha_m(V) = 0.4   * (V + 30) / (1 - exp(-(V + 30)/7.2))
 @inline beta_m(V)  = 0.124 * (V + 30) / (exp((V + 30)/7.2) - 1)
 @inline alpha_h(V) = 0.01  * (V + 45) / (exp((V + 45)/1.5) - 1) #error!! this is beta_h
 @inline beta_h(V)  = 0.03  * (V + 45) / (1 - exp(-(V + 45)/1.5) ) #error!! this is alpha_h
 
 ##########################################
-function mollifier(t::T, duration; pw = 20) where T
+@inline function mollifier(t::T, duration; pw = 20) where T
 	if abs(t/duration) > 10
 		return zero(T)
 	else
