@@ -2,10 +2,10 @@ cd(@__DIR__)
 using Pkg
 pkg"activate synapse"
 using Revise, SynapseElife,
-	Random,
-	Plots,
-	PiecewiseDeterministicMarkovProcesses,
-	ColorSchemes, Sundials
+    Random,
+    Plots,
+    PiecewiseDeterministicMarkovProcesses,
+    ColorSchemes, Sundials
 
 ############# Initials ##################################################
 data_protocol = dataProtocol("TigaretMellor16")

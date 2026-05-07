@@ -543,6 +543,7 @@ end
 getCaN(t, XC, XD) = XC[indexOfVariable(:CaN4), :]
 
 @views function getCamKII(t, XC, XD)
+	# KCaM0 .+ KCaM2C .+ KCaM2N .+ KCaM4 .+ PCaM0.+ PCaM2C.+ PCaM2N.+ PCaM4 .+ P .+ P2
 	return XC[indexOfVariable(:KCaM0), :]   .+
 			XC[indexOfVariable(:KCaM2C), :] .+
 			XC[indexOfVariable(:KCaM2N), :] .+

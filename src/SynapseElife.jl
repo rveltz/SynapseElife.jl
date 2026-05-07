@@ -28,5 +28,5 @@ module SynapseElife
 	export dataProtocol, buildTransitionMatrix, buildTransitionMatrix_ds
 
 	export stp, evolveSynapse_ds, evolveSynapse_noformat_ds, evolveSynapse, evolveSynapse_noformat
-	export getCaM, getCamKII, getCaN
+	export getCaM, getCamKII, getCaN, getPlasticity
 end
