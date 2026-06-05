@@ -366,13 +366,13 @@ $(SIGNATURES)
 
 
 """
-function pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu; algo = CHV(:lsoda), kwargs...)
+function pdmpsynapse(xc, xd, t1, t2, events_bap, bap_by_epsp, glu, p_synapse, nu::AbstractMatrix; algo = CHV(:lsoda), kwargs...)
 	problem = PDMP.PDMPProblem(
 		(xdot, xc, xd, p, t) -> F_synapse(xdot, xc, xd, p, t, events_bap, bap_by_epsp),
 		(rate, xc, xd, p, t, sum_rate) -> R_synapse(rate, xc, xd, p, t, sum_rate, glu),
 		nu, xc, xd, p_synapse, (t1, t2);
 		Ncache = 12) # this option is for AD in PreallocationTools
-	return solve(problem, algo; kwargs...)
+	return PDMP.solve(problem, algo; kwargs...)
 end
 
 """
@@ -399,15 +399,18 @@ Perform a simulation of the synapse model. Among other things, you need to provi
 - `nu` transition matrix. It is initialised with `buildTransitionMatrix()`.
 """
 function evolveSynapse(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
-		events_sorted_times,
-		is_pre_or_post_event,
-		bap_by_epsp,
-		is_glu_released,
-		algos;
-		verbose = false, progress = false,
-		abstol = 1e-8, reltol = 1e-7,
-		save_positions = (false, true),
-		nu = buildTransitionMatrix(), kwargs...) where T
+						events_sorted_times,
+						is_pre_or_post_event,
+						bap_by_epsp,
+						is_glu_released,
+						algos;
+						verbose = false, 
+						progress = false,
+						abstol = 1e-8, 
+						reltol = 1e-7,
+						save_positions = (false, true),
+						nu = buildTransitionMatrix(), 
+						kwargs...) where T
 
 		tt, XC, XD = evolveSynapse_noformat(xc0, xd0, p_synapse,
 						events_sorted_times,
@@ -415,9 +418,13 @@ function evolveSynapse(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
 						bap_by_epsp,
 						is_glu_released,
 						algos;
-				verbose = verbose, progress = progress,
-				abstol = abstol, reltol = reltol, save_positions = save_positions,
-				nu = nu, kwargs...)
+						verbose,
+						progress,
+						abstol,
+						reltol,
+						save_positions,
+						nu,
+						kwargs...)
 
 		# format the output to make it convenient to parse
 		# this is wasting a lot of ressources but is convenient for plotting
@@ -435,10 +442,13 @@ function evolveSynapse_noformat(xc0::Vector{𝒯}, xd0, p_synapse::SynapseParams
 								bap_by_epsp,
 								is_glu_released,
 								algos;
-								verbose = false, progress = false,
-								abstol = 1e-8, reltol = 1e-7, 
+								verbose = false, 
+								progress = false,
+								abstol = 1e-8, 
+								reltol = 1e-7, 
 								save_positions::Tuple{Bool, Bool} = (false, true),
-								nu = buildTransitionMatrix(), kwargs...) where 𝒯
+								nu = buildTransitionMatrix(), 
+								kwargs...) where 𝒯
 
 	save_positionsON = save_positionsOFF = save_positions
 

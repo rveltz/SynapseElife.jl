@@ -93,7 +93,7 @@ Definition of the PDMP problem for the presynaptic side.
 """
 function stpPDMP(xc0, xd0, parms, nu_stp, ti, tf; algo = PDMP.CHV(:lsoda), kwargs...)
 	problem = PDMP.PDMPProblem(stp_F_synapse!, stp_R_synapse!, nu_stp, xc0, xd0, parms, (ti, tf))
-	return solve(problem, algo; kwargs...)
+	return PDMP.solve(problem, algo; kwargs...)
 end
 
 """
@@ -122,11 +122,11 @@ an AP was triggered by an EPSP. However, the successful "AP induced by EPSP" are
 - `release_time_auxbap` list of the AP induced by EPSPs
 """
 function stp_evolve_synapse(t_end,
-			xc0, xd0,
-			par_pre::PreSynapseParams,
-			prespike::Vector{Float64},
-			nu = stp_build_transition_matrix();
-			kwargs...)
+							xc0, xd0,
+							par_pre::PreSynapseParams,
+							prespike::AbstractVector{Float64},
+							nu::AbstractMatrix = stp_build_transition_matrix();
+							kwargs...)
 	@assert findfirst(prespike .== 1) == nothing "Remove BaP from the list!!"
 
 	XC = VectorOfArray([xc0])
@@ -198,11 +198,11 @@ This function performs the simulation of the presynaptic side.
 - `glu_release_times` the vector of times in which a successful releases (glutamate) occurred
 - `bap_by_epsp_times` the vector of times in which an AP was triggered by an EPSP
 """
-function stp(t_end, param,
+@views function stp(t_end, param,
 			all_events_times,
 			is_pre_or_post_index;
 			_plot = false,
-			nu_stp = stp_build_transition_matrix(),
+			nu_stp::AbstractMatrix = stp_build_transition_matrix(),
 			kwargs...)
 	# presynaptic spikes
 	_prespike = all_events_times[is_pre_or_post_index .== true ]
