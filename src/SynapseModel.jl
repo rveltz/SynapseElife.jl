@@ -395,7 +395,8 @@ Perform a simulation of the synapse model. Among other things, you need to provi
 - `abstol = 1e-8` absolute tolerance for ODE time stepper
 - `reltol = 1e-7` relative tolerance for ODE time stepper
 - `progress = false` show a progressbar during simulation
-- `save_positions = (false, true)` save the values (before, after) the jumps (transitions)
+- `save_positionsON = (false, true)` save the values (before, after) the jumps (transitions), case with glutamate ON
+- `save_positionsOFF = (false, true)` save the values (before, after) the jumps (transitions), case with glutamate OFF
 - `nu` transition matrix. It is initialised with `buildTransitionMatrix()`.
 """
 function evolveSynapse(xc0::Vector{T}, xd0, p_synapse::SynapseParams,
@@ -447,10 +448,10 @@ function evolveSynapse_noformat(xc0::Vector{𝒯}, xd0, p_synapse::SynapseParams
 								abstol = 1e-8, 
 								reltol = 1e-7, 
 								save_positions::Tuple{Bool, Bool} = (false, true),
+								save_positionsON = save_positions,
+								save_positionsOFF = save_positions,
 								nu = buildTransitionMatrix(), 
 								kwargs...) where 𝒯
-
-	save_positionsON = save_positionsOFF = save_positions
 
 	@assert eltype(is_pre_or_post_event) == Bool "Provide booleans for glutamate releases."
 	@assert eltype(is_glu_released) == Bool "Provide booleans for glutamate indices."
